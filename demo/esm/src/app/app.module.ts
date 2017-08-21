@@ -5,7 +5,12 @@ import { AppComponent } from './app.component';
 import { AdaptiveModule } from '../../lib';
 
 @NgModule({
-  imports: [ BrowserModule, AdaptiveModule ],
+  imports: [
+    BrowserModule,
+    AdaptiveModule.forRoot({
+      screenWidths: 'for de root jwz'
+    })
+  ],
   declarations: [ AppComponent ],
   bootstrap: [ AppComponent ]
 })
