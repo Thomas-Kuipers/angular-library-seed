@@ -1,1 +1,1 @@
-export * from './tick-tock';
+export * from './adaptive';

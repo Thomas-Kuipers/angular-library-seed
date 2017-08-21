@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'my-app',
-  template: `<tick-tock></tick-tock>`
+  template: `<div [adaptive-classes]="'yoblo'"><div [adaptive-if]="'hoi'"></div></div>`
 })
 export class AppComponent {
   public header: string = 'UMD Demo';

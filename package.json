@@ -1,7 +1,7 @@
 {
-  "name": "angular-library-seed",
-  "version": "0.0.19",
-  "description": "Angular library seed",
+  "name": "ngx-adaptive",
+  "version": "0.0.1",
+  "description": "Angular Adaptive Module",
   "main": "./dist/index.umd.js",
   "module": "./dist/index.js",
   "typings": "./dist/index.d.ts",
@@ -14,23 +14,23 @@
     "aot-compilation",
     "library",
     "ng",
-    "seed",
-    "starter",
-    "tick-tock",
+    "adaptive",
+    "responsive",
+    "module",
     "typescript"
   ],
   "author": {
-    "name": "Oleksii Trekhleb",
-    "url": "https://www.linkedin.com/in/trekhleb/"
+    "name": "Thomas Kuipers",
+    "url": "https://www.thomaskuipers.nl/"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/trekhleb/angular-library-seed.git"
+    "url": "https://github.com/Thomas-Kuipers/ngx-adaptive.git"
   },
   "bugs": {
-    "url": "https://github.com/trekhleb/angular-library-seed/issues"
+    "url": "https://github.com/Thomas-Kuipers/ngx-adaptive/issues"
   },
-  "homepage": "https://github.com/trekhleb/angular-library-seed#readme",
+  "homepage": "https://github.com/Thomas-Kuipers/ngx-adaptive#readme",
   "scripts": {
     "build": "npm run build:esm && npm run build:umd",
     "build:esm": "gulp inline-templates && npm run ngcompile",

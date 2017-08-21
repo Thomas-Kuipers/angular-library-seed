@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 
-import { TickTockModule } from '../../lib';
+import { AdaptiveModule } from '../../lib';
 
 @NgModule({
-  imports: [ BrowserModule, TickTockModule ],
+  imports: [ BrowserModule, AdaptiveModule ],
   declarations: [ AppComponent ],
   bootstrap: [ AppComponent ]
 })
