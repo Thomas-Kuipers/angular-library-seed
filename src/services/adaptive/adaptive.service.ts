@@ -10,8 +10,9 @@ export type ScreenWidth = 'small' | 'normal' | 'large';
 export type Device = 'mobile' | 'tablet' | 'desktop';
 export type Orientation = 'landscape' | 'portrait';
 
-export interface ResponsiveConditions {
-  device?: Device | [Device];
+export interface AdaptiveConditions {
+  devices: [Device];
+  screenWidths?: [ScreenWidth];
   minScreenWidth?: ScreenWidth;
   maxScreenWidth?: ScreenWidth;
   orientation?: Orientation;
@@ -79,6 +80,68 @@ export class AdaptiveService {
       window.addEventListener('orientationchange', () =>
         this.checkOrientation(device)
       );
+    });
+  }
+
+  public checkConditions(
+    conditions: AdaptiveConditions
+  ): Observable<boolean> {
+    return Observable.create((observer) => {
+      const changeSubscription = this.changes.subscribe((changes) => {
+        const activeDevice: Device = changes[0];
+        const activeScreenWidth: ScreenWidth = changes[1];
+        const activeOrientation: Orientation = changes[2];
+
+        let result: boolean = true;
+
+        // If we have maxScreenWidth as a condition,
+        // check if the current screen width isn't higher
+        if (conditions.maxScreenWidth) {
+          if (
+            !this.checkMaxScreenWidth(
+              conditions.maxScreenWidth,
+              activeScreenWidth
+            )
+          ) {
+            result = false;
+          }
+        }
+
+        // If we have minScreenWidth as a condition,
+        // check if the current screen width isn't lower
+        if (conditions.minScreenWidth) {
+          if (
+            !this.checkMinScreenWidth(
+              conditions.minScreenWidth,
+              activeScreenWidth
+            )
+          ) {
+            result = false;
+          }
+        }
+
+        // If we have orientation as a condition, check if it matches the active orientation
+        if (
+          conditions.orientation &&
+          conditions.orientation !== activeOrientation
+        ) {
+          result = false;
+        }
+
+        // If we have device as a condition, check if it matches the active device
+        if (
+          conditions.devices &&
+          conditions.devices.indexOf(activeDevice) === -1
+        ) {
+          result = false;
+        }
+
+        observer.next(result);
+
+        return () => {
+          changeSubscription.unsubscribe();
+        };
+      });
     });
   }
 
@@ -171,77 +234,5 @@ export class AdaptiveService {
       this.activeDevice = device;
       this.device.next(device);
     }
-  }
-
-  public checkConditions(
-    conditions: ResponsiveConditions
-  ): Observable<boolean> {
-    return Observable.create(observer => {
-      const changeSubscription = this.changes.subscribe(changes => {
-        const activeDevice: Device = changes[0],
-          activeScreenWidth: ScreenWidth = changes[1],
-          activeOrientation: Orientation = changes[2];
-
-        let result: boolean = true;
-
-        // If we have maxScreenWidth as a condition,
-        // check if the current screen width isn't higher
-        if (conditions.maxScreenWidth) {
-          if (
-            !this.checkMaxScreenWidth(
-              conditions.maxScreenWidth,
-              activeScreenWidth
-            )
-          ) {
-            result = false;
-          }
-        }
-
-        // If we have minScreenWidth as a condition,
-        // check if the current screen width isn't lower
-        if (conditions.minScreenWidth) {
-          if (
-            !this.checkMinScreenWidth(
-              conditions.minScreenWidth,
-              activeScreenWidth
-            )
-          ) {
-            result = false;
-          }
-        }
-
-        // If we have orientation as a condition, check if it matches the active orientation
-        if (
-          conditions.orientation &&
-          conditions.orientation !== activeOrientation
-        ) {
-          result = false;
-        }
-
-        // If we have device as a condition, check if it matches the active device
-        if (conditions.device) {
-          // The device condition is a special case, because we can allow multiple devices
-          // like this, {myClassName: {device: ["tablet","mobile"]}}
-          // So we first check if we're using an array of devices or not
-          if (
-            conditions.device instanceof Array &&
-            conditions.device.indexOf(activeDevice) === -1
-          ) {
-            result = false;
-          } else if (
-            !(conditions.device instanceof Array) &&
-            conditions.device !== activeDevice
-          ) {
-            result = false;
-          }
-        }
-
-        observer.next(result);
-
-        return () => {
-          changeSubscription.unsubscribe();
-        };
-      });
-    });
   }
 }

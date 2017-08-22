@@ -8,6 +8,11 @@ import {
 } from '@angular/core';
 import { Subscription } from 'rxjs';
 import {AdaptiveService} from '../../';
+import {AdaptiveConditions} from '../../services/adaptive/adaptive.service';
+
+export interface AdaptiveClassesInterface {
+  [name: string]: AdaptiveConditions;
+}
 
 /**
  * Adds css classes based on specified conditions about device, screen width and
@@ -35,7 +40,7 @@ import {AdaptiveService} from '../../';
   selector: '[adaptive-classes]'
 })
 export class AdaptiveClassesDirective implements OnInit, OnDestroy {
-  @Input('adaptive-classes') public adaptiveClasses: any;
+  @Input('adaptive-classes') public adaptiveClasses: AdaptiveClassesInterface;
 
   private subscriptions: Subscription[] = [];
 
@@ -46,12 +51,14 @@ export class AdaptiveClassesDirective implements OnInit, OnDestroy {
   ) {}
 
   public ngOnInit() {
-    Object.keys(this.adaptiveClasses).forEach((className) => {
+    const classNames: string[] = Object.keys(this.adaptiveClasses);
+
+    classNames.forEach((className) => {
       const classConditions = this.adaptiveClasses[className];
 
       const subscription = this.adaptiveService
         .checkConditions(classConditions)
-        .subscribe(result => this.onCheckConditions(result, className));
+        .subscribe((result) => this.onCheckConditions(result, className));
 
       this.subscriptions.push(subscription);
     });

@@ -1,12 +1,12 @@
 import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
-import {AdaptiveService} from '../../services';
+import {AdaptiveService, AdaptiveConditions} from '../../services';
 import {Subscription} from 'rxjs';
 
 @Directive({
   selector: '[adaptive-if]'
 })
 export class AdaptiveIfDirective implements OnInit, OnDestroy {
-  @Input('adaptive-if') public adaptiveIf: any;
+  @Input('adaptive-if') public adaptiveIf: AdaptiveConditions;
 
   private hasView: boolean = false;
   private conditionsSubscription: Subscription;
@@ -31,11 +31,19 @@ export class AdaptiveIfDirective implements OnInit, OnDestroy {
 
   private onCheckConditions(result: boolean) {
     if (result && !this.hasView) {
-      this.viewContainer.createEmbeddedView(this.templateRef);
-      this.hasView = true;
+      this.initElement();
     } else if (!result && this.hasView) {
-      this.viewContainer.clear();
-      this.hasView = false;
+      this.destroyElement();
     }
+  }
+
+  private initElement() {
+    this.viewContainer.createEmbeddedView(this.templateRef);
+    this.hasView = true;
+  }
+
+  private destroyElement() {
+    this.viewContainer.clear();
+    this.hasView = false;
   }
 }
