@@ -1,25 +1,28 @@
-import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
+import {Injectable, Directive,
+Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef, Injector} from '@angular/core';
 import {AdaptiveService, AdaptiveConditions} from '../../services';
 import {Subscription} from 'rxjs';
 
 @Directive({
-  selector: '[adaptive-if]'
+  selector: '[ifBase]'
 })
-export class AdaptiveIfDirective implements OnInit, OnDestroy {
-  @Input('adaptive-if') public adaptiveIf: AdaptiveConditions;
+export class IfBaseDirective {
+  protected conditions: AdaptiveConditions;
 
   private hasView: boolean = false;
   private conditionsSubscription: Subscription;
 
   constructor(
-    private templateRef: TemplateRef<any>,
-    private viewContainer: ViewContainerRef,
-    private adaptiveService: AdaptiveService
+    templateRef: TemplateRef<any>,
+    viewContainer: ViewContainerRef,
+    adaptiveService: AdaptiveService
   ) {}
 
   public ngOnInit() {
+    console.log(this.adaptiveService);
+
     this.conditionsSubscription = this.adaptiveService
-      .checkConditions(this.adaptiveIf)
+      .checkConditions(this.conditions)
       .subscribe((result) => this.onCheckConditions(result));
   }
 

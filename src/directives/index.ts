@@ -1,2 +1,2 @@
-export * from './adaptive-if';
+export * from './if-adaptive';
 export * from './adaptive-classes';

@@ -1,10 +1,11 @@
-import { Injectable, Injector, InjectionToken } from '@angular/core';
+import { Injector, InjectionToken } from '@angular/core';
 
 export const SCREEN_WIDTHS = new InjectionToken('SCREEN_WIDTHS');
 
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
 import * as MobileDetect from 'mobile-detect';
+import {Observer} from "rxjs/Observer";
 
 export type ScreenWidth = 'small' | 'normal' | 'large';
 export type Device = 'mobile' | 'tablet' | 'desktop';
@@ -23,6 +24,8 @@ interface ScreenWidthSpec {
   max?: number;
   name: ScreenWidth;
 }
+
+declare let window: any;
 
 /**
  * The order of screen width specs matters, because of being able to specify a minScreenWidth and
@@ -86,7 +89,7 @@ export class AdaptiveService {
   public checkConditions(
     conditions: AdaptiveConditions
   ): Observable<boolean> {
-    return Observable.create((observer) => {
+    return Observable.create((observer: Observer<boolean>) => {
       const changeSubscription = this.changes.subscribe((changes) => {
         const activeDevice: Device = changes[0];
         const activeScreenWidth: ScreenWidth = changes[1];

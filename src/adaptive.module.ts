@@ -1,14 +1,14 @@
 import {NgModule, ModuleWithProviders, Provider, InjectionToken} from '@angular/core';
 import { AdaptiveService } from './services';
-import { AdaptiveClassesDirective } from "./directives";
-import { AdaptiveIfDirective } from "./directives";
+import { AdaptiveClassesDirective } from './directives';
+import { IfAdaptiveDirective } from './directives';
 import { SCREEN_WIDTHS } from './services';
 
 export interface AdaptiveModuleConfig {
   screenWidths?: any;
 }
 
-const defaultScreenWidths = {wat: 'dat'};
+export const defaultScreenWidths = {wat: 'dat'};
 
 
 @NgModule({
@@ -18,11 +18,11 @@ const defaultScreenWidths = {wat: 'dat'};
   ],
   declarations: [
     AdaptiveClassesDirective,
-    AdaptiveIfDirective
+    IfAdaptiveDirective
   ],
   exports: [
     AdaptiveClassesDirective,
-    AdaptiveIfDirective
+    IfAdaptiveDirective
   ]
 })
 export class AdaptiveModule {
@@ -32,6 +32,6 @@ export class AdaptiveModule {
       providers: [
         { provide: SCREEN_WIDTHS, useValue: config.screenWidths }
       ]
-    }
+    };
   }
 }
