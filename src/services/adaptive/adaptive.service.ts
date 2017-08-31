@@ -10,17 +10,25 @@ import {Observer} from "rxjs/Observer";
 export type ScreenWidth = 'small' | 'normal' | 'large';
 export type Device = 'mobile' | 'tablet' | 'desktop';
 export type Orientation = 'landscape' | 'portrait';
+export type Browser = 'chrome' | 'firefox';
+
+type functionType = (wat: number) => boolean;
+
+export type AdaptiveRule = {name: string, conditions: AdaptiveConditions};
+export type AdaptiveRules = AdaptiveRule[];
 
 export interface AdaptiveConditions {
-  devices: [Device];
+  devices?: [Device];
   screenWidths?: [ScreenWidth];
-  minScreenWidth?: ScreenWidth;
-  maxScreenWidth?: ScreenWidth;
+  minScreenWidth?: ScreenWidth | number;
+  maxScreenWidth?: ScreenWidth | number;
   orientation?: Orientation;
+  browsers?: [Browser];
+  custom?: boolean | functionType | Observable<boolean> | Promise<boolean>;
+  rules?: AdaptiveRules;
 }
 
 interface ScreenWidthSpec {
-  min?: number;
   max?: number;
   name: ScreenWidth;
 }
@@ -37,12 +45,10 @@ const screenWidths: ScreenWidthSpec[] = [
     name: 'small'
   },
   {
-    min: 1025,
     max: 1200,
     name: 'normal'
   },
   {
-    min: 1201,
     name: 'large'
   }
 ];
@@ -54,9 +60,6 @@ export class AdaptiveService {
   private screenWidth = new ReplaySubject<ScreenWidth>();
   private device = new ReplaySubject<Device>();
   private orientation = new ReplaySubject<Orientation>();
-  private activeScreenWidth: ScreenWidth;
-  private activeDevice: Device;
-  private activeOrientation: Orientation;
 
   constructor() {
     // Combine all the observables into one
@@ -99,15 +102,20 @@ export class AdaptiveService {
 
         // If we have maxScreenWidth as a condition,
         // check if the current screen width isn't higher
-        if (conditions.maxScreenWidth) {
-          if (
-            !this.checkMaxScreenWidth(
-              conditions.maxScreenWidth,
-              activeScreenWidth
-            )
-          ) {
-            result = false;
-          }
+        if
+        (
+          conditions.maxScreenWidth &&
+          typeof conditions.maxScreenWidth === 'number'
+        ) {
+          result = false;
+        }
+        else if
+        (
+          conditions.maxScreenWidth &&
+          typeof conditions.maxScreenWidth === 'string' &&
+          !this.checkMaxScreenWidth(conditions.maxScreenWidth, activeScreenWidth)
+        ) {
+          result = false;
         }
 
         // If we have minScreenWidth as a condition,
@@ -157,16 +165,16 @@ export class AdaptiveService {
     }
   }
 
+  /**
+   * Will find the first spec that's lower than the width.
+   *
+   * This works because the specs are ordered by max screen width.
+   *
+   * @param width
+   * @returns {undefined|ScreenWidthSpec}
+   */
   private getScreenWidthSpec(width: number): ScreenWidthSpec {
-    return screenWidths.find(spec => {
-      if (spec.min && width < spec.min) {
-        return false;
-      } else if (spec.max && width > spec.max) {
-        return false;
-      } else {
-        return true;
-      }
-    });
+    return screenWidths.find(spec => spec.max < width);
   }
 
   private getScreenWidthSpecByName(name: ScreenWidth): ScreenWidthSpec {
@@ -214,10 +222,10 @@ export class AdaptiveService {
       orientation = 'landscape';
     }
 
-    if (orientation !== this.activeOrientation) {
-      this.activeOrientation = orientation;
-      this.orientation.next(orientation);
-    }
+    this.orientation
+      .take(1)
+      .filter(oldOrientation => oldOrientation !== orientation)
+      .subscribe(() => this.orientation.next(orientation));
   }
 
   private checkDevice() {
@@ -233,9 +241,9 @@ export class AdaptiveService {
       device = 'desktop';
     }
 
-    if (device !== this.activeDevice) {
-      this.activeDevice = device;
-      this.device.next(device);
-    }
+    this.device
+      .take(1)
+      .filter(oldDevice => oldDevice !== device)
+      .subscribe(() => this.device.next(device));
   }
 }
