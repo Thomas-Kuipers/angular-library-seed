@@ -1,18 +1,23 @@
-import { Observable, ReplaySubject } from 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import {AdaptiveConditionInterface} from "./adaptive-condition.interface";
 import {Orientation, Device} from "../services/adaptive/adaptive.service";
+import {DeviceHelper} from "./device.helper";
 
+declare let window: any;
+
+@Injectable()
 export class OrientationHelper implements AdaptiveConditionInterface {
-  private active = new ReplaySubject<Orientation>();
+  private active = new BehaviorSubject<Orientation>(undefined);
 
-  constructor(device: Observable<Device>) {
+  constructor(private deviceHelper: DeviceHelper) {
     Observable.combineLatest(
-      device,
+      deviceHelper.activeObservable,
       Observable.fromEvent(window, 'orientationchange')
     ).subscribe((data) => this.check(data));
   }
 
-  private check(data) {
+  private check(data: any) {
     const device: Device = data[0];
 
     let orientation: Orientation;
@@ -47,7 +52,7 @@ export class OrientationHelper implements AdaptiveConditionInterface {
       .subscribe(() => this.active.next(orientation));
   }
 
-  public validate(test: Orientation) {
+  public validate(test: Orientation): Observable<boolean> {
     return this.active.map(active => active === test);
   }
 }

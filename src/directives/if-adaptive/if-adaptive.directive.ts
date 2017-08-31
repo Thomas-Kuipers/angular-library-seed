@@ -1,24 +1,31 @@
 import {Directive, Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef} from '@angular/core';
 import {AdaptiveConditions} from '../../services';
-import {IfBaseDirective} from '../if-base/if-base';
+import {IfBaseDirective, IfInterface} from '../if-base/if-base';
 import {AdaptiveService} from '../../services/adaptive/adaptive.service';
+import {Subscription} from 'rxjs';
 
 @Directive({
   selector: '[ifAdaptive]'
 })
-export class IfAdaptiveDirective extends IfBaseDirective {
+export class IfAdaptiveDirective extends IfBaseDirective implements IfInterface {
   @Input('ifAdaptive') public ifAdaptive: AdaptiveConditions;
 
+  public conditions: AdaptiveConditions;
+
   constructor(
-    protected templateRef: TemplateRef<any>,
-    protected viewContainer: ViewContainerRef,
-    protected adaptiveService: AdaptiveService
+    templateRef: TemplateRef<any>,
+    viewContainer: ViewContainerRef,
+    adaptiveService: AdaptiveService
   ) {
     super(templateRef, viewContainer, adaptiveService);
   }
 
   public ngOnInit() {
     this.conditions = this.ifAdaptive;
-    super.ngOnInit();
+    this.onInit();
+  }
+
+  public ngOnDestroy() {
+    this.onDestroy();
   }
 }

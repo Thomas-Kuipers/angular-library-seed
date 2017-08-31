@@ -1,10 +1,13 @@
-import { Observable, ReplaySubject } from 'rxjs/Rx';
+import {Injectable} from '@angular/core';
+import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import {AdaptiveConditionInterface} from "./adaptive-condition.interface";
-import {Orientation, Device} from "../services/adaptive/adaptive.service";
+import {Device} from "../services/adaptive/adaptive.service";
 import * as MobileDetect from 'mobile-detect';
 
+@Injectable()
 export class DeviceHelper implements AdaptiveConditionInterface {
-  private active = new ReplaySubject<Device>();
+  private active = new BehaviorSubject<Device>(undefined);
+  public activeObservable = this.active.asObservable();
 
   constructor() {
     this.check();
@@ -29,7 +32,7 @@ export class DeviceHelper implements AdaptiveConditionInterface {
       .subscribe(() => this.active.next(device));
   }
 
-  public validate(test: [Device]) {
+  public validate(test: [Device]): Observable<boolean> {
     return this.active.map(active => test.indexOf(active) !== -1);
   }
 }

@@ -3,6 +3,12 @@ Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef, Injector} from '@angula
 import {AdaptiveService, AdaptiveConditions} from '../../services';
 import {Subscription} from 'rxjs';
 
+export interface IfInterface {
+  conditions: AdaptiveConditions;
+  ngOnInit(): void;
+  ngOnDestroy(): void;
+}
+
 @Directive({
   selector: '[ifBase]'
 })
@@ -13,12 +19,12 @@ export class IfBaseDirective {
   private conditionsSubscription: Subscription;
 
   constructor(
-    templateRef: TemplateRef<any>,
-    viewContainer: ViewContainerRef,
-    adaptiveService: AdaptiveService
+    private templateRef: TemplateRef<any>,
+    private viewContainer: ViewContainerRef,
+    private adaptiveService: AdaptiveService
   ) {}
 
-  public ngOnInit() {
+  public onInit() {
     console.log(this.adaptiveService);
 
     this.conditionsSubscription = this.adaptiveService
@@ -26,7 +32,7 @@ export class IfBaseDirective {
       .subscribe((result) => this.onCheckConditions(result));
   }
 
-  public ngOnDestroy() {
+  public onDestroy() {
     if (this.conditionsSubscription) {
       this.conditionsSubscription.unsubscribe();
     }
