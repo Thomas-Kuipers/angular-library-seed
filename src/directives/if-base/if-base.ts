@@ -4,19 +4,13 @@ import {AdaptiveService, AdaptiveConditions} from '../../services';
 import {Subscription} from 'rxjs';
 
 export interface IfInterface {
-  conditions: AdaptiveConditions;
   ngOnInit(): void;
   ngOnDestroy(): void;
 }
 
-@Directive({
-  selector: '[ifBase]'
-})
-export class IfBaseDirective {
-  protected conditions: AdaptiveConditions;
-
+export abstract class IfBaseDirective {
   private hasView: boolean = false;
-  private conditionsSubscription: Subscription;
+  private validationSubscription: Subscription;
 
   constructor(
     private templateRef: TemplateRef<any>,
@@ -24,21 +18,19 @@ export class IfBaseDirective {
     private adaptiveService: AdaptiveService
   ) {}
 
-  public onInit() {
-    console.log(this.adaptiveService);
-
-    this.conditionsSubscription = this.adaptiveService
-      .checkConditions(this.conditions)
-      .subscribe((result) => this.onCheckConditions(result));
+  protected init(conditions: AdaptiveConditions) {
+    this.validationSubscription = this.adaptiveService
+      .validate(conditions)
+      .subscribe((result) => this.onValidated(result));
   }
 
-  public onDestroy() {
-    if (this.conditionsSubscription) {
-      this.conditionsSubscription.unsubscribe();
+  protected destroy() {
+    if (this.validationSubscription) {
+      this.validationSubscription.unsubscribe();
     }
   }
 
-  private onCheckConditions(result: boolean) {
+  private onValidated(result: boolean) {
     if (result && !this.hasView) {
       this.initElement();
     } else if (!result && this.hasView) {

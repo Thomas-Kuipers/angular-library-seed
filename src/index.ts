@@ -1,4 +1,5 @@
-export { AdaptiveService } from './services';
-export { AdaptiveModule } from './adaptive.module';
-export { IfAdaptiveDirective } from './directives';
-export { AdaptiveClassesDirective } from './directives';
+export * from './helpers';
+export * from './directives';
+export * from './services';
+export * from './adaptive.module'
+export {IfAdaptiveDirective} from './directives/if-adaptive/if-adaptive.directive'

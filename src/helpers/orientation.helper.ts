@@ -1,13 +1,12 @@
 import {Injectable} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {AdaptiveConditionInterface} from "./adaptive-condition.interface";
-import {Orientation, Device} from "../services/adaptive/adaptive.service";
-import {DeviceHelper} from "./device.helper";
+import {Orientation, Device} from "../";
+import {DeviceHelper} from "./";
 
 declare let window: any;
 
 @Injectable()
-export class OrientationHelper implements AdaptiveConditionInterface {
+export class OrientationHelper {
   private active = new BehaviorSubject<Orientation>(undefined);
 
   constructor(private deviceHelper: DeviceHelper) {
@@ -48,7 +47,7 @@ export class OrientationHelper implements AdaptiveConditionInterface {
 
     this.active
       .take(1)
-      .filter(oldOrientation => oldOrientation !== orientation)
+      .filter(prevOrientation => prevOrientation !== orientation)
       .subscribe(() => this.active.next(orientation));
   }
 

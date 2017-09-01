@@ -1,6 +1,7 @@
 import { Injector, InjectionToken } from '@angular/core';
 
 export const SCREEN_WIDTHS = new InjectionToken('SCREEN_WIDTHS');
+export const USER_AGENT_STRING = new InjectionToken<string>('USER_AGENT_STRING');
 
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
@@ -59,29 +60,26 @@ declare let window: any;
 export class AdaptiveService {
   public changes: Observable<[Device, ScreenWidth, Orientation]>;
 
-  private screenWidth = new ReplaySubject<ScreenWidth>();
-  private device = new ReplaySubject<Device>();
-  private orientation = new ReplaySubject<Orientation>();
-
   constructor
   (
     private deviceHelper: DeviceHelper,
     private orientationHelper: OrientationHelper
   ) {}
 
-  public checkConditions(conditions: AdaptiveConditions): Observable<boolean> {
-    let allConditions: Observable<boolean>[] = [];
+  public validate(conditions: AdaptiveConditions): Observable<boolean> {
+    let activeConditions: Observable<boolean>[] = [];
 
     if (conditions.devices) {
-      allConditions.push(this.deviceHelper.validate(conditions.devices));
+      activeConditions.push(this.deviceHelper.validate(conditions.devices));
     }
 
     if (conditions.orientation) {
-      allConditions.push(this.orientationHelper.validate(conditions.orientation));
+      activeConditions.push(this.orientationHelper.validate(conditions.orientation));
     }
 
+    // Check that there no false results in any of the observables
     return Observable
-      .combineLatest(allConditions)
+      .combineLatest(activeConditions)
       .map(results => results.indexOf(false) === -1);
   }
 }

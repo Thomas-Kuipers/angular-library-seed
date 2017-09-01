@@ -1,22 +1,24 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {AdaptiveConditionInterface} from "./adaptive-condition.interface";
-import {Device} from "../services/adaptive/adaptive.service";
+import {Device, USER_AGENT_STRING} from "../";
 import * as MobileDetect from 'mobile-detect';
 
 @Injectable()
-export class DeviceHelper implements AdaptiveConditionInterface {
+export class DeviceHelper {
   private active = new BehaviorSubject<Device>(undefined);
   public activeObservable = this.active.asObservable();
 
-  constructor() {
+  private userAgentString: string;
+
+  constructor(injector: Injector) {
+    this.userAgentString = injector.get(USER_AGENT_STRING);
     this.check();
   }
 
   private check() {
     let device: Device;
 
-    const md = new MobileDetect(window.navigator.userAgent);
+    const md = new MobileDetect(this.userAgentString);
 
     if (md.tablet()) {
       device = 'tablet';

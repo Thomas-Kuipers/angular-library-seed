@@ -1,12 +1,15 @@
 import {Directive, Input, TemplateRef, ViewContainerRef} from '@angular/core';
-import {AdaptiveConditions, AdaptiveService} from '../../services/adaptive/adaptive.service';
+import {AdaptiveConditions, AdaptiveService} from '../../services/adaptive';
 import {IfBaseDirective, IfInterface} from '../if-base/';
+import {Device} from '../../';
 
 @Directive({
-  selector: '[ifAdaptive]'
+  selector: '[ifDevices]'
 })
-export class IfAdaptiveDirective extends IfBaseDirective implements IfInterface {
-  @Input('ifAdaptive') public ifAdaptive: AdaptiveConditions;
+export class IfDevicesDirective extends IfBaseDirective implements IfInterface {
+  @Input('ifDevices') public ifDevices: [Device];
+
+  public conditions: AdaptiveConditions;
 
   constructor(
     templateRef: TemplateRef<any>,
@@ -17,7 +20,7 @@ export class IfAdaptiveDirective extends IfBaseDirective implements IfInterface 
   }
 
   public ngOnInit() {
-    this.init(this.ifAdaptive);
+    this.init({devices: this.ifDevices});
   }
 
   public ngOnDestroy() {
