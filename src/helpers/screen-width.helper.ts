@@ -1,13 +1,11 @@
 import {Injectable} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {Orientation, Device} from "../services/adaptive/adaptive.service";
-import {DeviceHelper} from "./device.helper";
 
 declare let window: any;
 
 @Injectable()
 export class ScreenWidthHelper {
-  private active = new BehaviorSubject<Orientation>(undefined);
+  private active = new BehaviorSubject<null>(undefined);
 
   constructor() {
 
@@ -21,7 +19,7 @@ export class ScreenWidthHelper {
     //   .subscribe(() => this.active.next(orientation));
   }
 
-  public validate(test: Orientation): Observable<boolean> {
-    return this.active.map(active => active === test);
+  public validate(): Observable<boolean> {
+    return this.active.map(active => active === 'a');
   }
 }

@@ -1,7 +1,9 @@
 import {Injectable, Injector} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {Device, USER_AGENT_STRING} from "../";
+import {USER_AGENT_STRING} from "../";
 import * as MobileDetect from 'mobile-detect';
+
+export type Device = 'mobile' | 'tablet' | 'desktop';
 
 @Injectable()
 export class DeviceHelper {

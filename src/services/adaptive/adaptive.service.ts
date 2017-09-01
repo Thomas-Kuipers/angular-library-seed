@@ -7,12 +7,10 @@ import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
 import * as MobileDetect from 'mobile-detect';
 import {Observer} from "rxjs/Observer";
-import {DeviceHelper} from "../../helpers/device.helper";
-import {OrientationHelper} from "../../helpers/orientation.helper";
+import {DeviceHelper, Device} from "../../helpers/device.helper";
+import {OrientationHelper, Orientation} from "../../helpers/orientation.helper";
 
 export type ScreenWidth = 'small' | 'normal' | 'large';
-export type Device = 'mobile' | 'tablet' | 'desktop';
-export type Orientation = 'landscape' | 'portrait';
 export type Browser = 'chrome' | 'firefox';
 
 export type functionType = (wat: number) => boolean;

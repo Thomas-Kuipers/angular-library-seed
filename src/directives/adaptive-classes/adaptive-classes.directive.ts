@@ -7,7 +7,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {AdaptiveService, AdaptiveConditions} from '../../';
+import {AdaptiveService, AdaptiveConditions} from '../../services/adaptive';
 
 export interface AdaptiveClassesInterface {
   [name: string]: AdaptiveConditions;
@@ -44,40 +44,40 @@ export class AdaptiveClassesDirective {
   private subscriptions: Subscription[] = [];
 
   constructor(
-    // private hostElement: ElementRef,
-    // private renderer: Renderer2,
-    // private adaptiveService: AdaptiveService
+    private hostElement: ElementRef,
+    private renderer: Renderer2,
+    private adaptiveService: AdaptiveService
   ) {}
 
-  // public ngOnInit() {
-  //   const classNames: string[] = Object.keys(this.adaptiveClasses);
-  //
-  //   classNames.forEach((className) => {
-  //     const classConditions = this.adaptiveClasses[className];
-  //
-  //     const subscription = this.adaptiveService
-  //       .validate(classConditions)
-  //       .subscribe((result) => this.onCheckConditions(result, className));
-  //
-  //     this.subscriptions.push(subscription);
-  //   });
-  // }
-  //
-  // public ngOnDestroy() {
-  //   this.subscriptions.forEach((subscription) => {
-  //     subscription.unsubscribe();
-  //   });
-  // }
-  //
-  // private onCheckConditions(result: boolean, className: string) {
-  //   if (result) {
-  //     // All the specified conditions were met, now add the class
-  //     this.renderer.addClass(this.hostElement.nativeElement, className);
-  //   } else {
-  //     // Remove the class in case it was maybe already there because it used
-  //     // to match the conditions, but now the user resized his screen and it doesn't
-  //     // match the conditions anymore.
-  //     this.renderer.removeClass(this.hostElement.nativeElement, className);
-  //   }
-  // }
+  public ngOnInit() {
+    const classNames: string[] = Object.keys(this.adaptiveClasses);
+
+    classNames.forEach((className) => {
+      const classConditions = this.adaptiveClasses[className];
+
+      const subscription = this.adaptiveService
+        .validate(classConditions)
+        .subscribe((result) => this.onCheckConditions(result, className));
+
+      this.subscriptions.push(subscription);
+    });
+  }
+
+  public ngOnDestroy() {
+    this.subscriptions.forEach((subscription) => {
+      subscription.unsubscribe();
+    });
+  }
+
+  private onCheckConditions(result: boolean, className: string) {
+    if (result) {
+      // All the specified conditions were met, now add the class
+      this.renderer.addClass(this.hostElement.nativeElement, className);
+    } else {
+      // Remove the class in case it was maybe already there because it used
+      // to match the conditions, but now the user resized his screen and it doesn't
+      // match the conditions anymore.
+      this.renderer.removeClass(this.hostElement.nativeElement, className);
+    }
+  }
 }

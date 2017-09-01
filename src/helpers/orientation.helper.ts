@@ -5,6 +5,8 @@ import {DeviceHelper} from "./";
 
 declare let window: any;
 
+export type Orientation = 'landscape' | 'portrait';
+
 @Injectable()
 export class OrientationHelper {
   private active = new BehaviorSubject<Orientation>(undefined);
