@@ -10,7 +10,6 @@ import { AdaptiveModule } from '../../lib/adaptive.module';
     BrowserModule,
     CommonModule,
     AdaptiveModule.forRoot({
-      screenWidths: 'for de root jwz'
     })
   ],
   declarations: [ AppComponent ],
