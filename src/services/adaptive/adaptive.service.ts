@@ -2,6 +2,8 @@ import { Injector, InjectionToken } from '@angular/core';
 
 export const SCREEN_WIDTHS = new InjectionToken('SCREEN_WIDTHS');
 export const USER_AGENT_STRING = new InjectionToken<string>('USER_AGENT_STRING');
+export const DEBOUNCE_TIME = new InjectionToken<number>('DEBOUNCE_TIME');
+export const SCREEN_WIDTH_BREAKPOINTS = new InjectionToken<ScreenWidthSpec[]>('SCREEN_WIDTH_BREAKPOINTS');
 
 import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
@@ -9,6 +11,7 @@ import * as MobileDetect from 'mobile-detect';
 import {Observer} from "rxjs/Observer";
 import {DeviceHelper, Device} from "../../helpers/device.helper";
 import {OrientationHelper, Orientation} from "../../helpers/orientation.helper";
+import {ScreenWidthSpec} from "../../helpers/screen-width.helper";
 
 export type ScreenWidth = 'small' | 'normal' | 'large';
 export type Browser = 'chrome' | 'firefox';
@@ -29,30 +32,7 @@ export interface AdaptiveConditions {
   rules?: AdaptiveRules;
 }
 
-interface ScreenWidthSpec {
-  max?: number;
-  name: ScreenWidth;
-}
-
 declare let window: any;
-
-/**
- * The order of screen width specs matters, because of being able to specify a minScreenWidth and
- * a maxScreenWidth.
- */
-// const screenWidths: ScreenWidthSpec[] = [
-//   {
-//     max: 1024,
-//     name: 'small'
-//   },
-//   {
-//     max: 1200,
-//     name: 'normal'
-//   },
-//   {
-//     name: 'large'
-//   }
-// ];
 
 @Injectable()
 export class AdaptiveService {
