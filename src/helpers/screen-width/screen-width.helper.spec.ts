@@ -63,12 +63,28 @@ describe('ScreenWidthHelper', () => {
         .subscribe((result) => expect(result).toBe(true));
   }));
 
+  it('should emit true when the screen is 200 and the max is 200', async(() => {
+      configureTestbed(200);
+
+      screenWidthHelper
+        .validateMax(200)
+        .subscribe((result) => expect(result).toBe(true));
+  }));
+
   it('should emit false when the screen is 100 and the min is 200', async(() => {
     configureTestbed(100);
 
     screenWidthHelper
       .validateMin(200)
       .subscribe((result) => expect(result).toBe(false));
+  }));
+
+  it('should emit true when the screen is 100 and the min is 100', async(() => {
+    configureTestbed(100);
+
+    screenWidthHelper
+      .validateMin(100)
+      .subscribe((result) => expect(result).toBe(true));
   }));
 
   it('should emit true when the screen is 200 and the min is 100', async(() => {
@@ -118,6 +134,4 @@ describe('ScreenWidthHelper', () => {
       .validateMax('m')
       .subscribe((result) => expect(result).toBe(true));
   }));
-
-
 });

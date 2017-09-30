@@ -99,7 +99,7 @@ export class ScreenWidthHelper {
   }
 
   private validateMinNumber(width: number): Observable<boolean> {
-    return this.activeNumber.map(active => active > width);
+    return this.activeNumber.map(active => active >= width);
   }
 
   private validateMaxName(name: string): Observable<boolean> {
@@ -119,44 +119,4 @@ export class ScreenWidthHelper {
 
     return this.validateMinNumber(prevSpec.max + 1);
   }
-
-
-  // private checkScreenWidth() {
-  //   const spec = this.getScreenWidthSpec(window.innerWidth);
-  //
-  //   if (spec.name !== this.activeScreenWidth) {
-  //     this.activeScreenWidth = spec.name;
-  //     this.screenWidth.next(spec.name);
-  //   }
-  // }
-  //
-  // private getScreenWidthSpec(width: number): ScreenWidthSpec {
-  //   return screenWidths.find(spec => {
-  //     if (spec.min && width < spec.min) {
-  //       return false;
-  //     } else if (spec.max && width > spec.max) {
-  //       return false;
-  //     } else {
-  //       return true;
-  //     }
-  //   });
-  // }
-  //
-  // private getScreenWidthSpecByName(name: ScreenWidth): ScreenWidthSpec {
-  //   return screenWidths.find(spec => spec.name === name);
-  // }
-  //
-  // private checkMinScreenWidth(min: ScreenWidth, active: ScreenWidth): boolean {
-  //   const activeSpec = this.getScreenWidthSpecByName(active),
-  //     minSpec = this.getScreenWidthSpecByName(min);
-  //
-  //   return screenWidths.indexOf(activeSpec) >= screenWidths.indexOf(minSpec);
-  // }
-  //
-  // private checkMaxScreenWidth(max: ScreenWidth, active: ScreenWidth): boolean {
-  //   const activeSpec = this.getScreenWidthSpecByName(active),
-  //     maxSpec = this.getScreenWidthSpecByName(max);
-  //
-  //   return screenWidths.indexOf(activeSpec) <= screenWidths.indexOf(maxSpec);
-  // }
 }
