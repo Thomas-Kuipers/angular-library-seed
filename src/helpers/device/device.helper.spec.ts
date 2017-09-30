@@ -30,75 +30,75 @@ describe('DeviceHelper', () => {
     deviceHelper = testBed.get(DeviceHelper);
   };
 
-  // it('should emit false when we test for mobile, but the user is on an ipad', async(() => {
-  //   configureTestbed(ipad);
-  //
-  //   deviceHelper
-  //     .validate(['mobile'])
-  //     .subscribe((result) => expect(result).toBe(false));
-  // }));
-  //
-  // it('should emit true when we test for tablet, and the user is on an ipad', async(() => {
-  //   configureTestbed(ipad);
-  //
-  //   deviceHelper
-  //     .validate(['tablet'])
-  //     .subscribe((result) => expect(result).toBe(true));
-  // }));
-  //
-  // it('should emit false when we test for tablet, but the user is on an iphone', async(() => {
-  //   configureTestbed(iphone);
-  //
-  //   deviceHelper
-  //     .validate(['tablet'])
-  //     .subscribe((result) => expect(result).toBe(false));
-  // }));
-  //
-  // it('should emit true when we test for mobile, and the user is on an iphone', async(() => {
-  //   configureTestbed(iphone);
-  //
-  //   deviceHelper
-  //     .validate(['mobile'])
-  //     .subscribe((result) => expect(result).toBe(true));
-  // }));
-  //
-  // it('should emit false when we test for desktop, but the user is on an iphone', async(() => {
-  //   configureTestbed(iphone);
-  //
-  //   deviceHelper
-  //     .validate(['desktop'])
-  //     .subscribe((result) => expect(result).toBe(false));
-  // }));
-  //
-  // it('should emit true when we test for desktop, and the user is on macOS chrome', async(() => {
-  //   configureTestbed(macOSChrome);
-  //
-  //   deviceHelper
-  //     .validate(['desktop'])
-  //     .subscribe((result) => expect(result).toBe(true));
-  // }));
-  //
-  // it('should emit true when we test for either desktop or tablet, and the user is on macOS chrome', async(() => {
-  //   configureTestbed(macOSChrome);
-  //
-  //   deviceHelper
-  //     .validate(['desktop', 'tablet'])
-  //     .subscribe((result) => expect(result).toBe(true));
-  // }));
-  //
-  // it('should emit true when we test for either mobile or tablet, and the user is on an iphone', async(() => {
-  //   configureTestbed(iphone);
-  //
-  //   deviceHelper
-  //     .validate(['tablet', 'mobile'])
-  //     .subscribe((result) => expect(result).toBe(true));
-  // }));
-  //
-  // it('should emit false when we test for either mobile or tablet, but the user is on macOS chrome', async(() => {
-  //   configureTestbed(macOSChrome);
-  //
-  //   deviceHelper
-  //     .validate(['tablet', 'mobile'])
-  //     .subscribe((result) => expect(result).toBe(false));
-  // }));
+  it('should emit false when we test for mobile, but the user is on an ipad', async(() => {
+    configureTestbed(ipad);
+
+    deviceHelper
+      .validate(['mobile'])
+      .subscribe((result) => expect(result).toBe(false));
+  }));
+
+  it('should emit true when we test for tablet, and the user is on an ipad', async(() => {
+    configureTestbed(ipad);
+
+    deviceHelper
+      .validate(['tablet'])
+      .subscribe((result) => expect(result).toBe(true));
+  }));
+
+  it('should emit false when we test for tablet, but the user is on an iphone', async(() => {
+    configureTestbed(iphone);
+
+    deviceHelper
+      .validate(['tablet'])
+      .subscribe((result) => expect(result).toBe(false));
+  }));
+
+  it('should emit true when we test for mobile, and the user is on an iphone', async(() => {
+    configureTestbed(iphone);
+
+    deviceHelper
+      .validate(['mobile'])
+      .subscribe((result) => expect(result).toBe(true));
+  }));
+
+  it('should emit false when we test for desktop, but the user is on an iphone', async(() => {
+    configureTestbed(iphone);
+
+    deviceHelper
+      .validate(['desktop'])
+      .subscribe((result) => expect(result).toBe(false));
+  }));
+
+  it('should emit true when we test for desktop, and the user is on macOS chrome', async(() => {
+    configureTestbed(macOSChrome);
+
+    deviceHelper
+      .validate(['desktop'])
+      .subscribe((result) => expect(result).toBe(true));
+  }));
+
+  it('should emit true when we test for either desktop or tablet, and the user is on macOS chrome', async(() => {
+    configureTestbed(macOSChrome);
+
+    deviceHelper
+      .validate(['desktop', 'tablet'])
+      .subscribe((result) => expect(result).toBe(true));
+  }));
+
+  it('should emit true when we test for either mobile or tablet, and the user is on an iphone', async(() => {
+    configureTestbed(iphone);
+
+    deviceHelper
+      .validate(['tablet', 'mobile'])
+      .subscribe((result) => expect(result).toBe(true));
+  }));
+
+  it('should emit false when we test for either mobile or tablet, but the user is on macOS chrome', async(() => {
+    configureTestbed(macOSChrome);
+
+    deviceHelper
+      .validate(['tablet', 'mobile'])
+      .subscribe((result) => expect(result).toBe(false));
+  }));
 });

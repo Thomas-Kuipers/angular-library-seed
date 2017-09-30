@@ -1,4 +1,3 @@
-export * from './helpers';
 export * from './directives';
 export * from './services';
 export * from './adaptive.module'

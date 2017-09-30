@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
+import {Injectable, Injector} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {Orientation, Device} from "../../";
-import {DeviceHelper} from "../";
+import {Device} from "../device/device.helper";
+import {DeviceHelper} from "../device/device.helper";
 import {DEBOUNCE_TIME} from "../../services/adaptive/adaptive.service";
 import {WindowRefHelper} from "../window-ref/window-ref";
 
@@ -13,8 +13,8 @@ export type Orientation = 'landscape' | 'portrait';
 export class OrientationHelper {
   private active = new BehaviorSubject<Orientation>(undefined);
 
-  constructor(private windowRef: WindowRefHelper, private deviceHelper: DeviceHelper) {
-    const debounceTime = 0;//injector.get(DEBOUNCE_TIME);
+  constructor(injector: Injector, private windowRef: WindowRefHelper, private deviceHelper: DeviceHelper) {
+    const debounceTime = injector.get(DEBOUNCE_TIME);
 
     Observable
       .combineLatest(

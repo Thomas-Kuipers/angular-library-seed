@@ -1,7 +1,7 @@
 import {Directive, Input, SimpleChanges, TemplateRef, ViewContainerRef} from '@angular/core';
 import {AdaptiveConditions, AdaptiveService} from '../../services/adaptive';
 import {IfBaseDirective, IfInterface} from '../if-base/';
-import {Device} from '../../';
+import {Device} from '../../helpers/device/device.helper';
 
 @Directive({
   selector: '[ifDevices]'
