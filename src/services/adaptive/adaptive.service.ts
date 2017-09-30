@@ -10,7 +10,7 @@ import { Observable, ReplaySubject } from 'rxjs/Rx';
 import * as MobileDetect from 'mobile-detect';
 import {Observer} from "rxjs/Observer";
 import {DeviceHelper, Device} from "../../helpers/device/device.helper";
-import {OrientationHelper, Orientation} from "../../helpers/orientation.helper";
+import {OrientationHelper, Orientation} from "../../helpers/orientation/orientation.helper";
 import {ScreenWidthSpec, ScreenWidthHelper} from "../../helpers/screen-width/screen-width.helper";
 
 export type ScreenWidth = 'small' | 'normal' | 'large';

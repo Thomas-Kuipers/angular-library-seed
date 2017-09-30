@@ -7,7 +7,7 @@ import { USER_AGENT_STRING } from './services';
 import { DEBOUNCE_TIME } from './services';
 import { SCREEN_WIDTH_BREAKPOINTS } from './services';
 import {DeviceHelper} from "./helpers/device/device.helper";
-import {OrientationHelper} from "./helpers/orientation.helper";
+import {OrientationHelper} from "./helpers/orientation/orientation.helper";
 import {IfDevicesDirective} from "./directives/if-devices/if-devices.directive";
 import {ScreenWidthSpec, ScreenWidthHelper} from "./helpers/screen-width/screen-width.helper";
 import {IfMinScreenWidthDirective} from "./directives/if-min-screen-width/if-min-screen-width.directive";
