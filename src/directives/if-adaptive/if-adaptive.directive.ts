@@ -23,4 +23,8 @@ export class IfAdaptiveDirective extends IfBaseDirective implements IfInterface 
   public ngOnDestroy() {
     this.destroy();
   }
+
+  public ngOnChanges(changes) {
+
+  }
 }

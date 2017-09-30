@@ -11,7 +11,7 @@ import * as MobileDetect from 'mobile-detect';
 import {Observer} from "rxjs/Observer";
 import {DeviceHelper, Device} from "../../helpers/device.helper";
 import {OrientationHelper, Orientation} from "../../helpers/orientation.helper";
-import {ScreenWidthSpec} from "../../helpers/screen-width.helper";
+import {ScreenWidthSpec, ScreenWidthHelper} from "../../helpers/screen-width/screen-width.helper";
 
 export type ScreenWidth = 'small' | 'normal' | 'large';
 export type Browser = 'chrome' | 'firefox';
@@ -23,9 +23,8 @@ export type AdaptiveRules = AdaptiveRule[];
 
 export interface AdaptiveConditions {
   devices?: [Device];
-  screenWidths?: [ScreenWidth];
-  minScreenWidth?: ScreenWidth | number;
-  maxScreenWidth?: ScreenWidth | number;
+  minScreenWidth?: string | number;
+  maxScreenWidth?: string | number;
   orientation?: Orientation;
   browsers?: [Browser];
   custom?: boolean | functionType | Observable<boolean> | Promise<boolean>;
@@ -41,7 +40,8 @@ export class AdaptiveService {
   constructor
   (
     private deviceHelper: DeviceHelper,
-    private orientationHelper: OrientationHelper
+    private orientationHelper: OrientationHelper,
+    private screenWidthHelper: ScreenWidthHelper
   ) {}
 
   public validate(conditions: AdaptiveConditions): Observable<boolean> {
@@ -54,6 +54,16 @@ export class AdaptiveService {
     if (conditions.orientation) {
       activeConditions.push(this.orientationHelper.validate(conditions.orientation));
     }
+
+    if (conditions.minScreenWidth) {
+      activeConditions.push(this.screenWidthHelper.validateMin(conditions.minScreenWidth));
+    }
+
+    if (conditions.maxScreenWidth) {
+      activeConditions.push(this.screenWidthHelper.validateMax(conditions.maxScreenWidth));
+    }
+
+
 
     // Check that there no false results in any of the observables
     return Observable

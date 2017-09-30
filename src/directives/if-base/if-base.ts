@@ -6,6 +6,7 @@ import {Subscription} from 'rxjs';
 export interface IfInterface {
   ngOnInit(): void;
   ngOnDestroy(): void;
+  ngOnChanges(changes): void;
 }
 
 export abstract class IfBaseDirective {

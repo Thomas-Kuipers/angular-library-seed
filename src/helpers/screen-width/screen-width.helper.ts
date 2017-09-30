@@ -1,6 +1,7 @@
 import {Injectable, Injector} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {DEBOUNCE_TIME, SCREEN_WIDTH_BREAKPOINTS} from "../services/adaptive/adaptive.service";
+import {DEBOUNCE_TIME, SCREEN_WIDTH_BREAKPOINTS} from "../../services/adaptive/adaptive.service";
+import {WindowRefHelper} from "../window-ref/window-ref";
 
 declare let window: any;
 
@@ -16,14 +17,14 @@ export class ScreenWidthHelper {
 
   private breakpoints: ScreenWidthSpec[];
 
-  constructor(private injector: Injector) {
+  constructor(private injector: Injector, private windowRef: WindowRefHelper) {
     const debounceTime = injector.get(DEBOUNCE_TIME);
     this.breakpoints = injector.get(SCREEN_WIDTH_BREAKPOINTS);
 
     this.check();
 
     Observable
-      .fromEvent(window, 'resize')
+      .fromEvent(this.windowRef.nativeWindow, 'resize')
       .debounceTime(debounceTime)
       .subscribe(() => this.check());
   }
@@ -61,7 +62,7 @@ export class ScreenWidthHelper {
   }
 
   private check() {
-    const currentNumber: number = window.innerWidth;
+    const currentNumber: number = this.windowRef.nativeWindow.innerWidth;
     const currentName: string = this.getScreenWidthName(currentNumber);
 
     this

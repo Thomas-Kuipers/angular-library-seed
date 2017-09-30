@@ -1,13 +1,12 @@
 import {Directive, Input, TemplateRef, ViewContainerRef} from '@angular/core';
 import {AdaptiveConditions, AdaptiveService} from '../../services/adaptive';
 import {IfBaseDirective, IfInterface} from '../if-base/';
-import {Device} from '../../';
 
 @Directive({
-  selector: '[ifDevices]'
+  selector: '[ifMinScreenWidth]'
 })
-export class IfDevicesDirective extends IfBaseDirective implements IfInterface {
-  @Input('ifDevices') public ifDevices: [Device];
+export class IfMinScreenWidthDirective extends IfBaseDirective implements IfInterface {
+  @Input('ifMinScreenWidth') public ifMinScreenWidth: number | string;
 
   public conditions: AdaptiveConditions;
 
@@ -20,7 +19,7 @@ export class IfDevicesDirective extends IfBaseDirective implements IfInterface {
   }
 
   public ngOnInit() {
-    this.init({devices: this.ifDevices});
+    this.init({minScreenWidth: this.ifMinScreenWidth});
   }
 
   public ngOnDestroy() {
