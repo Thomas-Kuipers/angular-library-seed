@@ -1,12 +1,14 @@
-import {Injectable, Directive,
-Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef, Injector} from '@angular/core';
+import {
+  Injectable, Directive,
+  Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef, Injector, SimpleChanges
+} from '@angular/core';
 import {AdaptiveService, AdaptiveConditions} from '../../services';
 import {Subscription} from 'rxjs';
 
 export interface IfInterface {
   ngOnInit(): void;
   ngOnDestroy(): void;
-  ngOnChanges(changes): void;
+  ngOnChanges(changes: SimpleChanges): void;
 }
 
 export abstract class IfBaseDirective {

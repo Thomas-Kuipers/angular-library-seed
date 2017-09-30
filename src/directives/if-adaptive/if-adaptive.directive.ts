@@ -1,4 +1,4 @@
-import {Directive, Input, TemplateRef, ViewContainerRef} from '@angular/core';
+import {Directive, Input, SimpleChanges, TemplateRef, ViewContainerRef} from '@angular/core';
 import {AdaptiveConditions, AdaptiveService} from '../../services/adaptive/adaptive.service';
 import {IfBaseDirective, IfInterface} from '../if-base/';
 
@@ -24,7 +24,7 @@ export class IfAdaptiveDirective extends IfBaseDirective implements IfInterface 
     this.destroy();
   }
 
-  public ngOnChanges(changes) {
+  public ngOnChanges(changes: SimpleChanges) {
 
   }
 }

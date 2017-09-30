@@ -1,7 +1,7 @@
 import {Injectable, Injector} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {DEBOUNCE_TIME, SCREEN_WIDTH_BREAKPOINTS} from "../../services/adaptive/adaptive.service";
-import {WindowRefHelper} from "../window-ref/window-ref";
+import {DEBOUNCE_TIME, SCREEN_WIDTH_BREAKPOINTS} from '../../services/adaptive/adaptive.service';
+import {WindowRefHelper} from '../window-ref/window-ref';
 
 declare let window: any;
 
@@ -27,6 +27,22 @@ export class ScreenWidthHelper {
       .fromEvent(this.windowRef.nativeWindow, 'resize')
       .debounceTime(debounceTime)
       .subscribe(() => this.check());
+  }
+
+  public validateMin(value: number | string): Observable<boolean> {
+    if (typeof value === 'number') {
+      return this.validateMinNumber(value);
+    } else {
+      return this.validateMinName(value);
+    }
+  }
+
+  public validateMax(value: number | string): Observable<boolean> {
+    if (typeof value === 'number') {
+      return this.validateMaxNumber(value);
+    } else {
+      return this.validateMaxName(value);
+    }
   }
 
   private getScreenWidthName(width: number): string {
@@ -102,24 +118,6 @@ export class ScreenWidthHelper {
     }
 
     return this.validateMinNumber(prevSpec.max + 1);
-  }
-
-  public validateMin(value: number | string): Observable<boolean> {
-    if (typeof value === 'number') {
-      return this.validateMinNumber(value);
-    }
-    else {
-      return this.validateMinName(value);
-    }
-  }
-
-  public validateMax(value: number | string): Observable<boolean> {
-    if (typeof value === 'number') {
-      return this.validateMaxNumber(value);
-    }
-    else {
-      return this.validateMaxName(value);
-    }
   }
 
 

@@ -63,11 +63,9 @@ export class AdaptiveService {
       activeConditions.push(this.screenWidthHelper.validateMax(conditions.maxScreenWidth));
     }
 
-
-
     // Check that there no false results in any of the observables
     return Observable
       .combineLatest(activeConditions)
-      .map(results => results.indexOf(false) === -1);
+      .map((results) => results.indexOf(false) === -1);
   }
 }
