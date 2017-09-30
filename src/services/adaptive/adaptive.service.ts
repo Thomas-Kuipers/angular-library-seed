@@ -9,7 +9,7 @@ import { Injectable } from '@angular/core';
 import { Observable, ReplaySubject } from 'rxjs/Rx';
 import * as MobileDetect from 'mobile-detect';
 import {Observer} from "rxjs/Observer";
-import {DeviceHelper, Device} from "../../helpers/device.helper";
+import {DeviceHelper, Device} from "../../helpers/device/device.helper";
 import {OrientationHelper, Orientation} from "../../helpers/orientation.helper";
 import {ScreenWidthSpec, ScreenWidthHelper} from "../../helpers/screen-width/screen-width.helper";
 

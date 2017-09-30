@@ -6,7 +6,7 @@ import { IfAdaptiveDirective } from './';
 import { USER_AGENT_STRING } from './services';
 import { DEBOUNCE_TIME } from './services';
 import { SCREEN_WIDTH_BREAKPOINTS } from './services';
-import {DeviceHelper} from "./helpers/device.helper";
+import {DeviceHelper} from "./helpers/device/device.helper";
 import {OrientationHelper} from "./helpers/orientation.helper";
 import {IfDevicesDirective} from "./directives/if-devices/if-devices.directive";
 import {ScreenWidthSpec, ScreenWidthHelper} from "./helpers/screen-width/screen-width.helper";

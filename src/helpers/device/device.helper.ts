@@ -1,6 +1,6 @@
 import {Injectable, Injector} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {USER_AGENT_STRING} from "../";
+import {USER_AGENT_STRING} from "../../";
 import * as MobileDetect from 'mobile-detect';
 
 export type Device = 'mobile' | 'tablet' | 'desktop';
@@ -15,6 +15,17 @@ export class DeviceHelper {
   constructor(injector: Injector) {
     this.userAgentString = injector.get(USER_AGENT_STRING);
     this.check();
+  }
+
+  /**
+   * Checks whether one of the devices in the supplied device array matches the active device of the client.
+   *
+   * @param {[Device]} test An array of devices that are okay. If one of the devices matches the active device,
+   * it will emit true.
+   * @returns {Observable<boolean>}
+   */
+  public validate(test: [Device]): Observable<boolean> {
+    return this.active.map(active => test.indexOf(active) !== -1);
   }
 
   private check() {
@@ -34,9 +45,5 @@ export class DeviceHelper {
       .take(1)
       .filter(prevDevice => prevDevice !== device)
       .subscribe(() => this.active.next(device));
-  }
-
-  public validate(test: [Device]): Observable<boolean> {
-    return this.active.map(active => test.indexOf(active) !== -1);
   }
 }
