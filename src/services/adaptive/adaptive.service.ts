@@ -4,9 +4,6 @@ import {DeviceHelper, Device} from "../../helpers/device/device.helper";
 import {OrientationHelper, Orientation} from "../../helpers/orientation/orientation.helper";
 import {ScreenWidthHelper} from "../../helpers/screen-width/screen-width.helper";
 
-export type ScreenWidth = 'small' | 'normal' | 'large';
-export type Browser = 'chrome' | 'firefox';
-
 export type AdaptiveRule = {name: string, conditions: AdaptiveConditions};
 
 export interface AdaptiveConditions {
@@ -14,17 +11,13 @@ export interface AdaptiveConditions {
   minScreenWidth?: string | number;
   maxScreenWidth?: string | number;
   orientation?: Orientation;
-  browsers?: [Browser];
+  browsers?: any;
   custom?: [boolean | Function | Observable<boolean> | Promise<boolean>];
   rule?: AdaptiveRule;
 }
 
-declare let window: any;
-
 @Injectable()
 export class AdaptiveService {
-  public changes: Observable<[Device, ScreenWidth, Orientation]>;
-
   constructor
   (
     private deviceHelper: DeviceHelper,

@@ -18,28 +18,28 @@ export interface AdaptiveClassesInterface {
  * orientation (landscape/portrait).
  *
  * Example usage 1:
- * <div [responsiveClasses]="{mySmallFontClass: {maxScreenWidth: 'small', orientation: 'landscape', device: 'desktop'}}"></div>
+ * <div [adaptiveClasses]="{mySmallFontClass: {maxScreenWidth: 'small', orientation: 'landscape', device: 'desktop'}}"></div>
  * The class 'mySmallFontClass' will only be used if all these conditions are true: (AND)
  *  - the screen width is small (check the ResponsiveService for more info on what is small exactly)
  *  - the device is a desktop
  *  - the user is in landscape mode
  *
  * Example usage 2:
- * <div [responsiveClasses]="{largeFont: {minScreenWidth: 'normal'}}"></div>
+ * <div [adaptiveClasses]="{largeFont: {minScreenWidth: 'normal'}}"></div>
  * The class 'largeFont' will be used if the screen width is normal. It doesn't matter what kind
  * of device is being used or what the orientation mode is.
  *
  * Example usage 3:
- * <div [responsiveClasses]="{largeFont: {minScreenWidth: 'normal'}, fatFingers: {device: ['tablet','mobile']}"></div>
+ * <div [adaptiveClasses]="{largeFont: {minScreenWidth: 'normal'}, fatFingers: {device: ['tablet','mobile']}"></div>
  * The class 'largeFont' will be used if the screen width is normal.
  * The class 'fatFingers' will be used if the device is either tablet or mobile.
  *
  */
 @Directive({
-  selector: '[adaptive-classes]'
+  selector: '[adaptiveClasses]'
 })
-export class AdaptiveClassesDirective {
-  @Input('adaptive-classes') public adaptiveClasses: AdaptiveClassesInterface;
+export class AdaptiveClassesDirective implements OnInit, OnDestroy {
+  @Input('adaptiveClasses') public adaptiveClasses: AdaptiveClassesInterface;
 
   private subscriptions: Subscription[] = [];
 
@@ -47,9 +47,13 @@ export class AdaptiveClassesDirective {
     private hostElement: ElementRef,
     private renderer: Renderer2,
     private adaptiveService: AdaptiveService
-  ) {}
+  ) {
+    console.log('constr');
+  }
 
   public ngOnInit() {
+    console.log('init');
+
     const classNames: string[] = Object.keys(this.adaptiveClasses);
 
     classNames.forEach((className) => {
