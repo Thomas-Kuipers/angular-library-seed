@@ -1,17 +1,15 @@
-import {NgModule, ModuleWithProviders, Provider, InjectionToken} from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { AdaptiveService } from './services';
-import { AdaptiveClassesDirective } from './';
-import { IfAdaptiveDirective } from './';
-import { USER_AGENT_STRING } from './services';
-import { DEBOUNCE_TIME } from './services';
-import { SCREEN_WIDTH_BREAKPOINTS } from './services';
+import {ModuleWithProviders, NgModule} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {AdaptiveService} from './services/adaptive/adaptive.service';
+import {AdaptiveClassesDirective} from './directives/adaptive-classes';
+import {IfAdaptiveDirective} from './directives/if-adaptive';
 import {DeviceHelper} from "./helpers/device/device.helper";
 import {OrientationHelper} from "./helpers/orientation/orientation.helper";
 import {IfDevicesDirective} from "./directives/if-devices/if-devices.directive";
-import {ScreenWidthSpec, ScreenWidthHelper} from "./helpers/screen-width/screen-width.helper";
+import {ScreenWidthHelper, ScreenWidthSpec} from "./helpers/screen-width/screen-width.helper";
 import {IfMinScreenWidthDirective} from "./directives/if-min-screen-width/if-min-screen-width.directive";
 import {WindowRefHelper} from "./helpers/window-ref/window-ref";
+import {DEBOUNCE_TIME, SCREEN_WIDTH_BREAKPOINTS, USER_AGENT_STRING} from "./injection-tokens";
 
 export interface AdaptiveModuleConfig {
   userAgentString?: string;

@@ -1,4 +1,4 @@
-import {Injectable, Injector} from '@angular/core';;
+import {Injectable} from '@angular/core';;
 
 declare let window: any;
 

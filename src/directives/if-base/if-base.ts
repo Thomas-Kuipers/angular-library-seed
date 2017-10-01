@@ -2,7 +2,7 @@ import {
   Injectable, Directive,
   Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef, Injector, SimpleChanges
 } from '@angular/core';
-import {AdaptiveService, AdaptiveConditions} from '../../services';
+import {AdaptiveService, AdaptiveConditions} from '../../services/adaptive/adaptive.service';
 import {Subscription} from 'rxjs';
 
 export interface IfInterface {

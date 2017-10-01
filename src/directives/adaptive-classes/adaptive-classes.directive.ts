@@ -7,7 +7,7 @@ import {
   OnDestroy
 } from '@angular/core';
 import { Subscription } from 'rxjs';
-import {AdaptiveService, AdaptiveConditions} from '../../services/adaptive';
+import {AdaptiveService, AdaptiveConditions} from '../../services/adaptive/adaptive.service';
 
 export interface AdaptiveClassesInterface {
   [name: string]: AdaptiveConditions;

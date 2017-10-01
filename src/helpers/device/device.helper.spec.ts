@@ -1,13 +1,12 @@
 import {
   async,
-  ComponentFixture,
   TestBed,
   getTestBed
 } from '@angular/core/testing';
 
 import {DeviceHelper} from './device.helper';
 import {Injector} from '@angular/core';
-import {USER_AGENT_STRING} from '../../services/adaptive/adaptive.service';
+import {USER_AGENT_STRING} from '../../injection-tokens';
 
 const ipad: string = 'Mozilla/5.0 (iPad; CPU OS 5_1_1 like Mac OS X) AppleWebKit/534.46 (KHTML, like Gecko) Version/5.1 Mobile/9B206 Safari/7534.48.3';
 const iphone: string = 'Mozilla/5.0 (iPhone; CPU iPhone OS 7_0_2 like Mac OS X) AppleWebKit/537.51.1 (KHTML, like Gecko) Mobile/11A501';

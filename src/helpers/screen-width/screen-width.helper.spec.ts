@@ -1,16 +1,14 @@
 import {
   async,
-  ComponentFixture,
   TestBed,
   getTestBed
 } from '@angular/core/testing';
 
-import { By } from '@angular/platform-browser';
-
 import {ScreenWidthHelper, ScreenWidthSpec} from './screen-width.helper';
 import {WindowRefHelper} from '../window-ref/window-ref';
 import {Injector} from '@angular/core';
-import {DEBOUNCE_TIME, SCREEN_WIDTH_BREAKPOINTS} from '../../services/adaptive/adaptive.service';
+import {SCREEN_WIDTH_BREAKPOINTS} from '../../injection-tokens';
+import {DEBOUNCE_TIME} from "../../injection-tokens";
 
 const defaultScreenWidths: ScreenWidthSpec[] = [
   {max: 575, name: 'xs'},

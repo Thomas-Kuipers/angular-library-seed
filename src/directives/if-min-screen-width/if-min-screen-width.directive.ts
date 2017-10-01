@@ -1,5 +1,5 @@
 import {Directive, Input, SimpleChanges, TemplateRef, ViewContainerRef} from '@angular/core';
-import {AdaptiveConditions, AdaptiveService} from '../../services/adaptive';
+import {AdaptiveConditions, AdaptiveService} from '../../services/adaptive/adaptive.service';
 import {IfBaseDirective, IfInterface} from '../if-base/';
 
 @Directive({

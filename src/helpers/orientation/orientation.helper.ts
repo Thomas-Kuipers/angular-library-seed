@@ -2,7 +2,7 @@ import {Injectable, Injector} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
 import {Device} from "../device/device.helper";
 import {DeviceHelper} from "../device/device.helper";
-import {DEBOUNCE_TIME} from "../../services/adaptive/adaptive.service";
+import {DEBOUNCE_TIME} from "../../injection-tokens";
 import {WindowRefHelper} from "../window-ref/window-ref";
 
 declare let window: any;
@@ -16,6 +16,9 @@ export class OrientationHelper {
   constructor(injector: Injector, private windowRef: WindowRefHelper, private deviceHelper: DeviceHelper) {
     const debounceTime = injector.get(DEBOUNCE_TIME);
 
+    deviceHelper.activeObservable
+      .subscribe(device => this.check([device]));
+
     Observable
       .combineLatest(
         deviceHelper.activeObservable,
@@ -27,24 +30,25 @@ export class OrientationHelper {
 
   private check(data: any) {
     const device: Device = data[0];
+    const nativeWindow = this.windowRef.nativeWindow;
 
     let orientation: Orientation;
 
     if (device === 'desktop') {
       orientation = 'landscape';
-    } else if (window.screen && window.screen['orientation']) {
+    } else if (nativeWindow.screen && nativeWindow.screen['orientation']) {
       // window.screen.orientation is available on most browsers
       if (
-        window.screen['orientation'].type === 'portrait-primary' ||
-        window.screen['orientation'].type === 'portrait-secondary'
+        nativeWindow.screen['orientation'].type === 'portrait-primary' ||
+        nativeWindow.screen['orientation'].type === 'portrait-secondary'
       ) {
         orientation = 'portrait';
       } else {
         orientation = 'landscape';
       }
-    } else if (typeof window.orientation === 'number') {
+    } else if (typeof nativeWindow.orientation === 'number') {
       // The window.orientation property is only available on iOS
-      if (window.orientation === 0 || window.orientation === 180) {
+      if (nativeWindow.orientation === 0 || nativeWindow.orientation === 180) {
         orientation = 'portrait';
       } else {
         orientation = 'landscape';

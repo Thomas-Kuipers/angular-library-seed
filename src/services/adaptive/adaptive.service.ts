@@ -1,25 +1,13 @@
-import { Injector, InjectionToken } from '@angular/core';
-
-export const SCREEN_WIDTHS = new InjectionToken('SCREEN_WIDTHS');
-export const USER_AGENT_STRING = new InjectionToken<string>('USER_AGENT_STRING');
-export const DEBOUNCE_TIME = new InjectionToken<number>('DEBOUNCE_TIME');
-export const SCREEN_WIDTH_BREAKPOINTS = new InjectionToken<ScreenWidthSpec[]>('SCREEN_WIDTH_BREAKPOINTS');
-
 import { Injectable } from '@angular/core';
-import { Observable, ReplaySubject } from 'rxjs/Rx';
-import * as MobileDetect from 'mobile-detect';
-import {Observer} from "rxjs/Observer";
+import { Observable, } from 'rxjs/Rx';
 import {DeviceHelper, Device} from "../../helpers/device/device.helper";
 import {OrientationHelper, Orientation} from "../../helpers/orientation/orientation.helper";
-import {ScreenWidthSpec, ScreenWidthHelper} from "../../helpers/screen-width/screen-width.helper";
+import {ScreenWidthHelper} from "../../helpers/screen-width/screen-width.helper";
 
 export type ScreenWidth = 'small' | 'normal' | 'large';
 export type Browser = 'chrome' | 'firefox';
 
-export type functionType = (wat: number) => boolean;
-
 export type AdaptiveRule = {name: string, conditions: AdaptiveConditions};
-export type AdaptiveRules = AdaptiveRule[];
 
 export interface AdaptiveConditions {
   devices?: [Device];
@@ -27,8 +15,8 @@ export interface AdaptiveConditions {
   maxScreenWidth?: string | number;
   orientation?: Orientation;
   browsers?: [Browser];
-  custom?: boolean | functionType | Observable<boolean> | Promise<boolean>;
-  rules?: AdaptiveRules;
+  custom?: [boolean | Function | Observable<boolean> | Promise<boolean>];
+  rule?: AdaptiveRule;
 }
 
 declare let window: any;
@@ -43,6 +31,20 @@ export class AdaptiveService {
     private orientationHelper: OrientationHelper,
     private screenWidthHelper: ScreenWidthHelper
   ) {}
+
+  private customToObservable(custom: boolean | Observable<boolean> | Promise<boolean> | Function): Observable<boolean> {
+    if (typeof custom === 'boolean') {
+      return Observable.of(custom);
+    } else if (custom instanceof Observable) {
+      return custom;
+    } else if (custom instanceof Promise) {
+      return Observable.fromPromise(custom);
+    } else if (typeof custom === 'function') {
+      return Observable.of(custom());
+    } else {
+      throw new Error('Unable to convert variable of type ' + typeof custom + ' into boolean observable');
+    }
+  }
 
   public validate(conditions: AdaptiveConditions): Observable<boolean> {
     let activeConditions: Observable<boolean>[] = [];
@@ -61,6 +63,18 @@ export class AdaptiveService {
 
     if (conditions.maxScreenWidth) {
       activeConditions.push(this.screenWidthHelper.validateMax(conditions.maxScreenWidth));
+    }
+
+    if (typeof conditions.custom !== 'undefined') {
+      // If it's not an array already, convert it into an array
+      if (!Array.isArray(conditions.custom)) {
+        conditions.custom = [conditions.custom];
+      }
+
+      // For each custom condition, convert it to an observable and add it to the active conditions
+      conditions.custom.forEach(custom => {
+        activeConditions.push(this.customToObservable(custom));
+      });
     }
 
     // Check that there no false results in any of the observables

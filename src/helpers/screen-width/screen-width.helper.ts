@@ -1,7 +1,8 @@
 import {Injectable, Injector} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {DEBOUNCE_TIME, SCREEN_WIDTH_BREAKPOINTS} from '../../services/adaptive/adaptive.service';
+import {SCREEN_WIDTH_BREAKPOINTS} from '../../injection-tokens';
 import {WindowRefHelper} from '../window-ref/window-ref';
+import {DEBOUNCE_TIME} from "../../injection-tokens";
 
 declare let window: any;
 

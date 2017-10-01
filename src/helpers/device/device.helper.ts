@@ -1,6 +1,6 @@
 import {Injectable, Injector} from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {USER_AGENT_STRING} from "../../";
+import {USER_AGENT_STRING} from "../../injection-tokens";
 import * as MobileDetect from 'mobile-detect';
 
 export type Device = 'mobile' | 'tablet' | 'desktop';
