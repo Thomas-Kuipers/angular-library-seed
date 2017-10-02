@@ -2,8 +2,8 @@ import { Component } from '@angular/core';
 
 @Component({
   selector: 'my-app',
-  template: `<div>vbfhdsb<div *ifMinScreenWidth="'s'" [adaptiveClasses]="{yolo: {minScreenWidth: 100}}">dit ziue je allaseen als screenwidth > s</div></div>`
+  template: `
+    <div [adaptiveClasses]="{red: {minScreenWidth: 'm'}}">This text will be red if screen width > m</div>
+  `
 })
-export class AppComponent {
-  public header: string = 'UMD Demo';
-}
+export class AppComponent {}
