@@ -1,19 +1,20 @@
 import {
   async,
   TestBed,
-  getTestBed, tick, fakeAsync
 } from '@angular/core/testing';
 
 import {AdaptiveService} from "../../services/adaptive/adaptive.service";
-import {Observable} from "rxjs/Observable";
+import {ReplaySubject} from "rxjs/Rx";
 import {AdaptiveClassesDirective} from "./adaptive-classes.directive";
 import {createTestComponent, TestComponent} from "../create-test-component";
 
 describe('AdaptiveClassesDirective', () => {
-  const configureTestbed = (result: boolean) => {
+  let validation = new ReplaySubject<boolean>();
+
+  const configureTestbed = () => {
     class MockAdaptiveService {
       validate() {
-        return Observable.of(result);
+        return validation.asObservable();
       }
     }
 
@@ -28,24 +29,48 @@ describe('AdaptiveClassesDirective', () => {
     });
   };
 
-  it('should compile with adaptiveClassesDirective', async(() => {
-    configureTestbed(true);
+  it('should compile when applied to a DOM node', async(() => {
+    configureTestbed();
 
-    const fixture = createTestComponent('<div></div>');
+    const fixture = createTestComponent('<div [adaptiveClasses]="{}"></div>');
 
     expect(fixture).toBeDefined();
   }));
 
-  it('should add a class when the conditions validate as true', fakeAsync(() => {
-    configureTestbed(true);
+  it('should add a class when the conditions validate as true', async(() => {
+    configureTestbed();
 
-    const fixture = createTestComponent('<div [adaptiveClasses]="{yolo: {minScreenWidth: 1}}">wat</div>');
-    tick();
+    const fixture = createTestComponent(`<div [adaptiveClasses]="{yolo: {minScreenWidth: 1}}">wat</div>`);
+    validation.next(true);
+    fixture.detectChanges();
+
+    const div = fixture.nativeElement.querySelector('div');
+    expect(div.classList.contains('yolo')).toBe(true);
+  }));
+
+  it('should not add a class when the conditions validate as false', async(() => {
+    configureTestbed();
+
+    const fixture = createTestComponent(`<div [adaptiveClasses]="{yolo: {minScreenWidth: 1}}">wat</div>`);
+    validation.next(false);
+    fixture.detectChanges();
+
+    const div = fixture.nativeElement.querySelector('div');
+    expect(div.classList.contains('yolo')).toBe(false);
+  }));
+
+  it('should remove a class when the conditions later evaluate to false', async(() => {
+    configureTestbed();
+
+    const fixture = createTestComponent(`<div [adaptiveClasses]="{yolo: {minScreenWidth: 1}}">wat</div>`);
     const div = fixture.nativeElement.querySelector('div');
 
-    console.log(div);
+    validation.next(true);
+    fixture.detectChanges();
+    expect(div.classList.contains('yolo')).toBe(true);
 
-    // console.log(div.classList.contains('yolo'));
-
+    validation.next(false);
+    fixture.detectChanges();
+    expect(div.classList.contains('yolo')).toBe(false);
   }));
 });

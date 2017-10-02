@@ -47,13 +47,9 @@ export class AdaptiveClassesDirective implements OnInit, OnDestroy {
     private hostElement: ElementRef,
     private renderer: Renderer2,
     private adaptiveService: AdaptiveService
-  ) {
-    console.log('constr');
-  }
+  ) {}
 
   public ngOnInit() {
-    console.log('init');
-
     const classNames: string[] = Object.keys(this.adaptiveClasses);
 
     classNames.forEach((className) => {
@@ -61,7 +57,7 @@ export class AdaptiveClassesDirective implements OnInit, OnDestroy {
 
       const subscription = this.adaptiveService
         .validate(classConditions)
-        .subscribe((result) => this.onCheckConditions(result, className));
+        .subscribe((result) => this.onValidated(result, className));
 
       this.subscriptions.push(subscription);
     });
@@ -73,7 +69,7 @@ export class AdaptiveClassesDirective implements OnInit, OnDestroy {
     });
   }
 
-  private onCheckConditions(result: boolean, className: string) {
+  private onValidated(result: boolean, className: string) {
     if (result) {
       // All the specified conditions were met, now add the class
       this.renderer.addClass(this.hostElement.nativeElement, className);
