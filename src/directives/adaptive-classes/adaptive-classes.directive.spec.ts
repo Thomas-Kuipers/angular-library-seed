@@ -9,9 +9,11 @@ import {AdaptiveClassesDirective} from "./adaptive-classes.directive";
 import {createTestComponent, TestComponent} from "../create-test-component";
 
 describe('AdaptiveClassesDirective', () => {
-  let validation = new ReplaySubject<boolean>();
+  let validation: ReplaySubject<boolean>;
 
   const configureTestbed = () => {
+    validation = new ReplaySubject<boolean>();
+
     class MockAdaptiveService {
       validate() {
         return validation.asObservable();
