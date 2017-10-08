@@ -1,7 +1,7 @@
 # `ngx-adaptive` - a module for adaptive and responsive Angular (>= 2) applications
 
 [![codecov](https://codecov.io/gh/Thomas-Kuipers/ngx-adaptive/branch/master/graph/badge.svg)](https://codecov.io/gh/Thomas-Kuipers/ngx-adaptive)
-
+[![build status](https://travis-ci.org/Thomas-Kuipers/ngx-adaptive.svg?branch=master)](https://travis-ci.org/Thomas-Kuipers/ngx-adaptive)
 
 Example usage:
 ````
