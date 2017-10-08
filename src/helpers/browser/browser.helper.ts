@@ -1,30 +1,30 @@
-import {Injectable, Injector} from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {USER_AGENT_STRING} from "../../injection-tokens";
+import { USER_AGENT_STRING } from '../../injection-tokens';
 import * as MobileDetect from 'mobile-detect';
 
 export type Browser =
-  'Chrome' |
-  'Dolfin' |
-  'Opera' |
-  'Skyfire' |
-  'Edge' |
-  'IE' |
-  'Firefox' |
-  'Bolt' |
-  'TeaShark' |
-  'Blazer' |
-  'Safari' |
-  'UCBrowser' |
-  'baiduboxapp' |
-  'baidubrowser' |
-  'DiigoBrowser' |
-  'Puffin' |
-  'Mercury' |
-  'ObigoBrowser' |
-  'NetFront' |
-  'GenericBrowser' |
-  'PaleMoon';
+  | 'Chrome'
+  | 'Dolfin'
+  | 'Opera'
+  | 'Skyfire'
+  | 'Edge'
+  | 'IE'
+  | 'Firefox'
+  | 'Bolt'
+  | 'TeaShark'
+  | 'Blazer'
+  | 'Safari'
+  | 'UCBrowser'
+  | 'baiduboxapp'
+  | 'baidubrowser'
+  | 'DiigoBrowser'
+  | 'Puffin'
+  | 'Mercury'
+  | 'ObigoBrowser'
+  | 'NetFront'
+  | 'GenericBrowser'
+  | 'PaleMoon';
 
 @Injectable()
 export class BrowserHelper {
@@ -38,9 +38,11 @@ export class BrowserHelper {
   }
 
   /**
-   * Checks whether one of the devices in the supplied device array matches the active device of the client.
+   * Checks whether one of the devices in the supplied device array matches the
+   * active device of the client.
    *
-   * @param {[Device]} test An array of devices that are okay. If one of the devices matches the active device,
+   * @param {[Device]} test An array of devices that are okay. If one of the
+   * devices matches the active device,
    * it will emit true.
    * @returns {Observable<boolean>}
    */
@@ -50,7 +52,7 @@ export class BrowserHelper {
 
   private check() {
     const md = new MobileDetect(this.userAgentString);
-    const browser: Browser = <Browser>md.userAgent();
+    const browser: Browser = md.userAgent() as Browser;
 
     console.log(browser);
 

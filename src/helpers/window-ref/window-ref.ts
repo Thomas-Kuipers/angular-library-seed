@@ -1,11 +1,10 @@
-import {Injectable} from '@angular/core';;
+import { Injectable } from '@angular/core';
 
 declare let window: any;
 
 @Injectable()
 export class WindowRefHelper {
-  constructor() {
-  }
+  constructor() {}
 
   get nativeWindow() {
     return window;

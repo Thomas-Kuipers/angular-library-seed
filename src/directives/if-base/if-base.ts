@@ -1,9 +1,19 @@
 import {
-  Injectable, Directive,
-  Input, OnDestroy, OnInit, TemplateRef, ViewContainerRef, Injector, SimpleChanges
+  Injectable,
+  Directive,
+  Input,
+  OnDestroy,
+  OnInit,
+  TemplateRef,
+  ViewContainerRef,
+  Injector,
+  SimpleChanges
 } from '@angular/core';
-import {AdaptiveService, AdaptiveConditions} from '../../services/adaptive/adaptive.service';
-import {Subscription} from 'rxjs';
+import {
+  AdaptiveService,
+  AdaptiveConditions
+} from '../../services/adaptive/adaptive.service';
+import { Subscription } from 'rxjs';
 
 export interface IfInterface {
   ngOnInit(): void;
@@ -24,7 +34,7 @@ export abstract class IfBaseDirective {
   protected init(conditions: AdaptiveConditions) {
     this.validationSubscription = this.adaptiveService
       .validate(conditions)
-      .subscribe((result) => this.onValidated(result));
+      .subscribe(result => this.onValidated(result));
   }
 
   protected destroy() {

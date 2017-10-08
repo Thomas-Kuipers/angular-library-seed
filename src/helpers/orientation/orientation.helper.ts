@@ -1,9 +1,9 @@
-import {Injectable, Injector} from '@angular/core';
+import { Injectable, Injector } from '@angular/core';
 import { Observable, BehaviorSubject } from 'rxjs/Rx';
-import {Device} from "../device/device.helper";
-import {DeviceHelper} from "../device/device.helper";
-import {DEBOUNCE_TIME} from "../../injection-tokens";
-import {WindowRefHelper} from "../window-ref/window-ref";
+import { Device } from '../device/device.helper';
+import { DeviceHelper } from '../device/device.helper';
+import { DEBOUNCE_TIME } from '../../injection-tokens';
+import { WindowRefHelper } from '../window-ref/window-ref';
 
 declare let window: any;
 
@@ -13,19 +13,21 @@ export type Orientation = 'landscape' | 'portrait';
 export class OrientationHelper {
   private active = new BehaviorSubject<Orientation>(undefined);
 
-  constructor(injector: Injector, private windowRef: WindowRefHelper, private deviceHelper: DeviceHelper) {
+  constructor(
+    injector: Injector,
+    private windowRef: WindowRefHelper,
+    private deviceHelper: DeviceHelper
+  ) {
     const debounceTime = injector.get(DEBOUNCE_TIME);
 
-    deviceHelper.activeObservable
-      .subscribe(device => this.check([device]));
+    deviceHelper.activeObservable.subscribe(device => this.check([device]));
 
-    Observable
-      .combineLatest(
-        deviceHelper.activeObservable,
-        Observable.fromEvent(windowRef.nativeWindow, 'orientationchange')
-      )
+    Observable.combineLatest(
+      deviceHelper.activeObservable,
+      Observable.fromEvent(windowRef.nativeWindow, 'orientationchange')
+    )
       .debounceTime(debounceTime)
-      .subscribe((data) => this.check(data));
+      .subscribe(data => this.check(data));
   }
 
   private check(data: any) {

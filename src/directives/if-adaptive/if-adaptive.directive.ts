@@ -1,11 +1,21 @@
-import {Directive, Input, SimpleChanges, TemplateRef, ViewContainerRef} from '@angular/core';
-import {AdaptiveConditions, AdaptiveService} from '../../services/adaptive/adaptive.service';
-import {IfBaseDirective, IfInterface} from '../if-base/';
+import {
+  Directive,
+  Input,
+  SimpleChanges,
+  TemplateRef,
+  ViewContainerRef
+} from '@angular/core';
+import {
+  AdaptiveConditions,
+  AdaptiveService
+} from '../../services/adaptive/adaptive.service';
+import { IfBaseDirective, IfInterface } from '../if-base/';
 
 @Directive({
   selector: '[ifAdaptive]'
 })
-export class IfAdaptiveDirective extends IfBaseDirective implements IfInterface {
+export class IfAdaptiveDirective extends IfBaseDirective
+  implements IfInterface {
   @Input('ifAdaptive') public ifAdaptive: AdaptiveConditions;
 
   constructor(
@@ -24,7 +34,5 @@ export class IfAdaptiveDirective extends IfBaseDirective implements IfInterface 
     this.destroy();
   }
 
-  public ngOnChanges(changes: SimpleChanges) {
-
-  }
+  public ngOnChanges(changes: SimpleChanges) {}
 }

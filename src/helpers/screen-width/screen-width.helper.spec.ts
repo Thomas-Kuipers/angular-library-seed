@@ -1,21 +1,17 @@
-import {
-  async,
-  TestBed,
-  getTestBed
-} from '@angular/core/testing';
+import { async, TestBed, getTestBed } from '@angular/core/testing';
 
-import {ScreenWidthHelper, ScreenWidthSpec} from './screen-width.helper';
-import {WindowRefHelper} from '../window-ref/window-ref';
-import {Injector} from '@angular/core';
-import {SCREEN_WIDTH_BREAKPOINTS} from '../../injection-tokens';
-import {DEBOUNCE_TIME} from "../../injection-tokens";
+import { ScreenWidthHelper, ScreenWidthSpec } from './screen-width.helper';
+import { WindowRefHelper } from '../window-ref/window-ref';
+import { Injector } from '@angular/core';
+import { SCREEN_WIDTH_BREAKPOINTS } from '../../injection-tokens';
+import { DEBOUNCE_TIME } from '../../injection-tokens';
 
 const defaultScreenWidths: ScreenWidthSpec[] = [
-  {max: 575, name: 'xs'},
-  {max: 767, name: 's'},
-  {max: 991, name: 'm'},
-  {max: 1199, name: 'l'},
-  {max: null, name: 'xl'}
+  { max: 575, name: 'xs' },
+  { max: 767, name: 's' },
+  { max: 991, name: 'm' },
+  { max: 1199, name: 'l' },
+  { max: null, name: 'xl' }
 ];
 
 describe('ScreenWidthHelper', () => {
@@ -45,91 +41,124 @@ describe('ScreenWidthHelper', () => {
     screenWidthHelper = testBed.get(ScreenWidthHelper);
   };
 
-  it('should emit false when the screen is 200 and the max is 100', async(() => {
+  it(
+    'should emit false when the screen is 200 and the max is 100',
+    async(() => {
       configureTestbed(200);
 
       screenWidthHelper
         .validateMax(100)
-        .subscribe((result) => expect(result).toBe(false));
-  }));
+        .subscribe(result => expect(result).toBe(false));
+    })
+  );
 
-  it('should emit true when the screen is 100 and the max is 200', async(() => {
+  it(
+    'should emit true when the screen is 100 and the max is 200',
+    async(() => {
       configureTestbed(100);
 
       screenWidthHelper
         .validateMax(200)
-        .subscribe((result) => expect(result).toBe(true));
-  }));
+        .subscribe(result => expect(result).toBe(true));
+    })
+  );
 
-  it('should emit true when the screen is 200 and the max is 200', async(() => {
+  it(
+    'should emit true when the screen is 200 and the max is 200',
+    async(() => {
       configureTestbed(200);
 
       screenWidthHelper
         .validateMax(200)
-        .subscribe((result) => expect(result).toBe(true));
-  }));
+        .subscribe(result => expect(result).toBe(true));
+    })
+  );
 
-  it('should emit false when the screen is 100 and the min is 200', async(() => {
-    configureTestbed(100);
+  it(
+    'should emit false when the screen is 100 and the min is 200',
+    async(() => {
+      configureTestbed(100);
 
-    screenWidthHelper
-      .validateMin(200)
-      .subscribe((result) => expect(result).toBe(false));
-  }));
+      screenWidthHelper
+        .validateMin(200)
+        .subscribe(result => expect(result).toBe(false));
+    })
+  );
 
-  it('should emit true when the screen is 100 and the min is 100', async(() => {
-    configureTestbed(100);
+  it(
+    'should emit true when the screen is 100 and the min is 100',
+    async(() => {
+      configureTestbed(100);
 
-    screenWidthHelper
-      .validateMin(100)
-      .subscribe((result) => expect(result).toBe(true));
-  }));
+      screenWidthHelper
+        .validateMin(100)
+        .subscribe(result => expect(result).toBe(true));
+    })
+  );
 
-  it('should emit true when the screen is 200 and the min is 100', async(() => {
-    configureTestbed(200);
+  it(
+    'should emit true when the screen is 200 and the min is 100',
+    async(() => {
+      configureTestbed(200);
 
-    screenWidthHelper
-      .validateMin(100)
-      .subscribe((result) => expect(result).toBe(true));
-  }));
+      screenWidthHelper
+        .validateMin(100)
+        .subscribe(result => expect(result).toBe(true));
+    })
+  );
 
-  it('should emit false when the screen is "s" and the min is "m"', async(() => {
-    configureTestbed(576);
+  it(
+    'should emit false when the screen is "s" and the min is "m"',
+    async(() => {
+      configureTestbed(576);
 
-    screenWidthHelper
-      .validateMin('m')
-      .subscribe((result) => expect(result).toBe(false));
-  }));
+      screenWidthHelper
+        .validateMin('m')
+        .subscribe(result => expect(result).toBe(false));
+    })
+  );
 
-  it('should emit true when the screen is "m" and the min is "s"', async(() => {
-    configureTestbed(768);
+  it(
+    'should emit true when the screen is "m" and the min is "s"',
+    async(() => {
+      configureTestbed(768);
 
-    screenWidthHelper
-      .validateMin('s')
-      .subscribe((result) => expect(result).toBe(true));
-  }));
+      screenWidthHelper
+        .validateMin('s')
+        .subscribe(result => expect(result).toBe(true));
+    })
+  );
 
-  it('should emit false when the screen is "m" and the max is "s"', async(() => {
-    configureTestbed(768);
+  it(
+    'should emit false when the screen is "m" and the max is "s"',
+    async(() => {
+      configureTestbed(768);
 
-    screenWidthHelper
-      .validateMax('s')
-      .subscribe((result) => expect(result).toBe(false));
-  }));
+      screenWidthHelper
+        .validateMax('s')
+        .subscribe(result => expect(result).toBe(false));
+    })
+  );
 
-  it('should emit true when the screen is "s" and the max is "m"', async(() => {
-    configureTestbed(767);
+  it(
+    'should emit true when the screen is "s" and the max is "m"',
+    async(() => {
+      configureTestbed(767);
 
-    screenWidthHelper
-      .validateMax('m')
-      .subscribe((result) => expect(result).toBe(true));
-  }));
+      screenWidthHelper
+        .validateMax('m')
+        .subscribe(result => expect(result).toBe(true));
+    })
+  );
 
-  it('should emit true when the screen is "m" and the max is "m"', async(() => {
-    configureTestbed(991);
+  it(
+    'should emit true when the screen is "m" and the max is "m"',
+    async(() => {
+      configureTestbed(991);
 
-    screenWidthHelper
-      .validateMax('m')
-      .subscribe((result) => expect(result).toBe(true));
-  }));
+      screenWidthHelper
+        .validateMax('m')
+        .subscribe(result => expect(result).toBe(true));
+    })
+  );
 });

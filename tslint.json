@@ -23,6 +23,10 @@
     "use-input-property-decorator": true,
     "use-output-property-decorator": true,
     "use-pipe-transform-interface": true,
-    "variable-name": [true, "allow-leading-underscore", "ban-keywords", "check-format"]
+    "variable-name": [true, "allow-leading-underscore", "ban-keywords", "check-format"],
+    "arrow-parens": [true, "ban-single-arg-parens"],
+    "no-empty": false,
+    "member-ordering": false,
+    "max-classes-per-file": [false]
   }
 }

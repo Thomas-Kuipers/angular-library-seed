@@ -1,12 +1,20 @@
-import {Injectable, Injector} from '@angular/core';
-import { Observable, } from 'rxjs/Rx';
-import {DeviceHelper, Device} from "../../helpers/device/device.helper";
-import {OrientationHelper, Orientation} from "../../helpers/orientation/orientation.helper";
-import {ScreenWidthHelper} from "../../helpers/screen-width/screen-width.helper";
-import {ADAPTIVE_RULES} from "../../injection-tokens";
-import {BehaviorSubject} from "rxjs/BehaviorSubject";
+import { Injectable, Injector } from '@angular/core';
+import { Observable } from 'rxjs/Rx';
+import { DeviceHelper, Device } from '../../helpers/device/device.helper';
+import {
+  OrientationHelper,
+  Orientation
+} from '../../helpers/orientation/orientation.helper';
+import { ScreenWidthHelper } from '../../helpers/screen-width/screen-width.helper';
+import { ADAPTIVE_RULES } from '../../injection-tokens';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-export type AdaptiveRule = {name: string, conditions: AdaptiveConditions};
+export interface AdaptiveRule {
+  name: string;
+  conditions: AdaptiveConditions;
+}
+
+type booleanFunction = () => boolean;
 
 export interface AdaptiveConditions {
   devices?: [Device];
@@ -14,16 +22,17 @@ export interface AdaptiveConditions {
   maxScreenWidth?: string | number;
   orientation?: Orientation;
   browsers?: any;
-  custom?: [boolean | Function | Observable<boolean> | Promise<boolean>];
+  custom?: [boolean | booleanFunction | Observable<boolean> | Promise<boolean>];
   rule?: string;
 }
 
 @Injectable()
 export class AdaptiveService {
-  private rules: BehaviorSubject<AdaptiveRule[]> = new BehaviorSubject<AdaptiveRule[]>([]);
+  private rules: BehaviorSubject<AdaptiveRule[]> = new BehaviorSubject<
+    AdaptiveRule[]
+  >([]);
 
-  constructor
-  (
+  constructor(
     private deviceHelper: DeviceHelper,
     private orientationHelper: OrientationHelper,
     private screenWidthHelper: ScreenWidthHelper,
@@ -37,7 +46,7 @@ export class AdaptiveService {
   }
 
   public addRule(rule: AdaptiveRule): void {
-    let rules: AdaptiveRule[] = this.rules.getValue();
+    const rules: AdaptiveRule[] = this.rules.getValue();
 
     rules.push(rule);
 
@@ -53,22 +62,28 @@ export class AdaptiveService {
   }
 
   public validate(conditions: AdaptiveConditions): Observable<boolean> {
-    let activeConditions: Observable<boolean>[] = [];
+    const activeConditions: Array<Observable<boolean>> = [];
 
     if (conditions.devices) {
       activeConditions.push(this.deviceHelper.validate(conditions.devices));
     }
 
     if (conditions.orientation) {
-      activeConditions.push(this.orientationHelper.validate(conditions.orientation));
+      activeConditions.push(
+        this.orientationHelper.validate(conditions.orientation)
+      );
     }
 
     if (conditions.minScreenWidth) {
-      activeConditions.push(this.screenWidthHelper.validateMin(conditions.minScreenWidth));
+      activeConditions.push(
+        this.screenWidthHelper.validateMin(conditions.minScreenWidth)
+      );
     }
 
     if (conditions.maxScreenWidth) {
-      activeConditions.push(this.screenWidthHelper.validateMax(conditions.maxScreenWidth));
+      activeConditions.push(
+        this.screenWidthHelper.validateMax(conditions.maxScreenWidth)
+      );
     }
 
     if (typeof conditions.custom !== 'undefined') {
@@ -84,19 +99,22 @@ export class AdaptiveService {
     }
 
     if (conditions.rule) {
-      const ruleValidation: Observable<boolean> = this.findRule(conditions.rule)
-        .flatMap(rule => this.validate(rule.conditions));
+      const ruleValidation: Observable<boolean> = this.findRule(
+        conditions.rule
+      ).flatMap(rule => this.validate(rule.conditions));
 
       activeConditions.push(ruleValidation);
     }
 
     // Check that there no false results in any of the observables
-    return Observable
-      .combineLatest(activeConditions)
-      .map((results) => results.indexOf(false) === -1);
+    return Observable.combineLatest(activeConditions).map(
+      results => results.indexOf(false) === -1
+    );
   }
 
-  private customToObservable(custom: boolean | Observable<boolean> | Promise<boolean> | Function): Observable<boolean> {
+  private customToObservable(
+    custom: boolean | Observable<boolean> | Promise<boolean> | booleanFunction
+  ): Observable<boolean> {
     if (typeof custom === 'boolean') {
       return Observable.of(custom);
     } else if (custom instanceof Observable) {
@@ -106,13 +124,19 @@ export class AdaptiveService {
     } else if (typeof custom === 'function') {
       return Observable.of(custom());
     } else {
-      return Observable.throw('Unable to convert variable of type ' + typeof custom + ' into boolean observable');
+      return Observable.throw(
+        'Unable to convert variable of type ' +
+          typeof custom +
+          ' into boolean observable'
+      );
     }
   }
 
   private findRule(name: string): Observable<AdaptiveRule> {
     return this.rules
-      .filter(rules => typeof rules.find(rule => rule.name === name) !== 'undefined')
-      .map(rules => rules[0])
+      .filter(
+        rules => typeof rules.find(rule => rule.name === name) !== 'undefined'
+      )
+      .map(rules => rules[0]);
   }
 }
