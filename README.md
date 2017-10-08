@@ -2,6 +2,7 @@
 
 [![codecov](https://codecov.io/gh/Thomas-Kuipers/ngx-adaptive/branch/master/graph/badge.svg)](https://codecov.io/gh/Thomas-Kuipers/ngx-adaptive)
 
+
 Example usage:
 ````
 <component-for-large-screens *ifMinScreenWidth="'l'"></component-for-large-screens>
