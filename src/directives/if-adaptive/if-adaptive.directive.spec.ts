@@ -13,7 +13,7 @@ describe('IfAdaptiveDirective', () => {
 
   const configureTestbed = () => {
     validation = new ReplaySubject<boolean>();
-    
+
     class MockAdaptiveService {
       validate() {
         return validation.asObservable();
@@ -69,6 +69,22 @@ describe('IfAdaptiveDirective', () => {
 
     const span = fixture.nativeElement.querySelector('span');
     expect(span).toBeDefined();
+  }));
+
+  it('should destroy the component when the conditions later validate as false', async(() => {
+    configureTestbed();
+
+    const fixture = createTestComponent('<div *ifAdaptive="{}"><span>do i exist</span></div>');
+    validation.next(true);
+    fixture.detectChanges();
+
+    let span = fixture.nativeElement.querySelector('span');
+    expect(span).toBeDefined();
+
+    validation.next(false);
+    fixture.detectChanges();
+    span = fixture.nativeElement.querySelector('span');
+    expect(span).toBeNull();
   }));
 
 });

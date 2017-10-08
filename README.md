@@ -1,5 +1,7 @@
 # `ngx-adaptive` - a module for adaptive and responsive Angular (>= 2) applications
 
+[![codecov](https://codecov.io/gh/Thomas-Kuipers/ngx-adaptive/branch/master/graph/badge.svg)](https://codecov.io/gh/Thomas-Kuipers/ngx-adaptive)
+
 Example usage:
 ````
 <component-for-large-screens *ifMinScreenWidth="'l'"></component-for-large-screens>
@@ -9,12 +11,12 @@ Example usage:
 Add the class 'bigButtons' when the user is on a mobile or tablet device, and
  add the class 'smallButtons' when the user is on desktop.
 ````
-<beautiful-component 
+<nav 
   [adaptiveClasses]="{
       bigButtons: { devices: ['mobile', 'tablet'] },
       smallButtons: { devices: ['desktop'] }
   }">
-</beautiful-component>
+</nav>
 ````
 
 Example with all available conditions.

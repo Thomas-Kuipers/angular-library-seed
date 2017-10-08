@@ -84,10 +84,10 @@ export class AdaptiveService {
     }
 
     if (conditions.rule) {
-      const ruleConditions: Observable<boolean> = this.findRule(conditions.rule)
+      const ruleValidation: Observable<boolean> = this.findRule(conditions.rule)
         .flatMap(rule => this.validate(rule.conditions));
 
-      activeConditions.push(ruleConditions);
+      activeConditions.push(ruleValidation);
     }
 
     // Check that there no false results in any of the observables
