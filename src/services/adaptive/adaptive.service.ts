@@ -4,6 +4,7 @@ import {DeviceHelper, Device} from "../../helpers/device/device.helper";
 import {OrientationHelper, Orientation} from "../../helpers/orientation/orientation.helper";
 import {ScreenWidthHelper} from "../../helpers/screen-width/screen-width.helper";
 import {ADAPTIVE_RULES} from "../../injection-tokens";
+import {BehaviorSubject} from "rxjs/BehaviorSubject";
 
 export type AdaptiveRule = {name: string, conditions: AdaptiveConditions};
 
@@ -19,7 +20,7 @@ export interface AdaptiveConditions {
 
 @Injectable()
 export class AdaptiveService {
-  private rules: AdaptiveRule[] = [];
+  private rules: BehaviorSubject<AdaptiveRule[]> = new BehaviorSubject<AdaptiveRule[]>([]);
 
   constructor
   (
@@ -31,16 +32,24 @@ export class AdaptiveService {
     const rulesFromConfig: AdaptiveRule[] = injector.get(ADAPTIVE_RULES);
 
     if (rulesFromConfig) {
-      this.rules = rulesFromConfig;
+      this.rules.next(rulesFromConfig);
     }
   }
 
   public addRule(rule: AdaptiveRule): void {
-    this.rules.push(rule);
+    let rules: AdaptiveRule[] = this.rules.getValue();
+
+    rules.push(rule);
+
+    this.rules.next(rules);
   }
 
   public removeRule(ruleName: string): void {
-    this.rules = this.rules.filter(rule => rule.name !== ruleName);
+    let rules: AdaptiveRule[] = this.rules.getValue();
+
+    rules = rules.filter(rule => rule.name !== ruleName);
+
+    this.rules.next(rules);
   }
 
   public validate(conditions: AdaptiveConditions): Observable<boolean> {
@@ -75,14 +84,10 @@ export class AdaptiveService {
     }
 
     if (conditions.rule) {
-      const rule: AdaptiveRule = this.findRule(conditions.rule);
+      const ruleConditions: Observable<boolean> = this.findRule(conditions.rule)
+        .flatMap(rule => this.validate(rule.conditions));
 
-      if (rule) {
-        activeConditions.push(this.validate(rule.conditions));
-      }
-      else {
-        return Observable.throw('The adaptive rule ' + conditions.rule + ' is undefined');
-      }
+      activeConditions.push(ruleConditions);
     }
 
     // Check that there no false results in any of the observables
@@ -105,7 +110,9 @@ export class AdaptiveService {
     }
   }
 
-  private findRule(name: string): AdaptiveRule {
-    return this.rules.find(rule => rule.name === name);
+  private findRule(name: string): Observable<AdaptiveRule> {
+    return this.rules
+      .filter(rules => typeof rules.find(rule => rule.name === name) !== 'undefined')
+      .map(rules => rules[0])
   }
 }

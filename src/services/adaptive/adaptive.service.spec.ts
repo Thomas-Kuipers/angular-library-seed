@@ -283,7 +283,7 @@ describe('AdaptiveService', () => {
       .subscribe((result) => expect(result).toBe(true));
   }));
 
-  it('should throw an error when trying to use an unspecified rule', async(() => {
+  it('should wait if a rule is used that is not yet specified', async(() => {
     const rule: AdaptiveRule = {
       name: 'myScreenWidthRule',
       conditions: {
@@ -296,16 +296,21 @@ describe('AdaptiveService', () => {
       minScreenWidth: true,
       orientation: true,
       devices: true
-    }, [rule]);
+    });
+
+    const start: number = (new Date).getTime();
 
     adaptiveService
       .validate({
-        rule: 'thisRuleDoesNotExist'
+        rule: rule.name
       })
-      .subscribe(
-      (result) => fail('Expected an error'),
-      (error) => {}
-      );
+      .subscribe((result) => {
+        const end: number = (new Date).getTime();
+        const time: number = end - start;
+        expect(time).toBeGreaterThanOrEqual(1000);
+      });
+
+    setTimeout(() => adaptiveService.addRule(rule), 1000);
   }));
 
   it('should be able to add a new rule during runtime', async(() => {
@@ -334,7 +339,24 @@ describe('AdaptiveService', () => {
       );
   }));
 
-  it('should be able to remove a rule during runtime', async(() => {
+  it('should not emit a value when the rule is not specified', (done) => {
+    configureTestbed({
+      maxScreenWidth: false,
+      minScreenWidth: true,
+      orientation: true,
+      devices: true
+    });
+
+    adaptiveService
+      .validate({
+        rule: 'ruleThatDoesNotExist'
+      })
+      .subscribe((result) => fail('Should not have emitted a value'));
+
+    setTimeout(() => done(), 1000);
+  });
+
+  it('should not emit a value when the rule was removed before validating', (done) => {
     const rule: AdaptiveRule = {
       name: 'myScreenWidthRule',
       conditions: {
@@ -347,7 +369,7 @@ describe('AdaptiveService', () => {
       minScreenWidth: true,
       orientation: true,
       devices: true
-    });
+    }, [rule]);
 
     adaptiveService.removeRule(rule.name);
 
@@ -355,9 +377,8 @@ describe('AdaptiveService', () => {
       .validate({
         rule: rule.name
       })
-      .subscribe(
-        (result) => fail('Expected an error'),
-        (error) => {}
-      );
-  }));
+      .subscribe((result) => fail('Should not have emitted a value'));
+
+    setTimeout(() => done(), 1000);
+  });
 });
