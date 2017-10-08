@@ -14,7 +14,7 @@ export interface AdaptiveRule {
   conditions: AdaptiveConditions;
 }
 
-type booleanFunction = () => boolean;
+export type booleanFunction = () => boolean;
 
 export interface AdaptiveConditions {
   devices?: [Device];
