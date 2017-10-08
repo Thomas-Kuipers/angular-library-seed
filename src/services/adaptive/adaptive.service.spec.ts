@@ -4,16 +4,17 @@ import {
   getTestBed
 } from '@angular/core/testing';
 
-import {AdaptiveService} from "./adaptive.service";
+import {AdaptiveRule, AdaptiveService} from "./adaptive.service";
 import {DeviceHelper} from "../../helpers/device/device.helper";
 import {OrientationHelper} from "../../helpers/orientation/orientation.helper";
 import {ScreenWidthHelper} from "../../helpers/screen-width/screen-width.helper";
 import {Observable} from "rxjs/Observable";
+import {ADAPTIVE_RULES} from "../../injection-tokens";
 
 describe('AdaptiveService', () => {
   let adaptiveService: AdaptiveService;
 
-  const configureTestbed = (results: any) => {
+  const configureTestbed = (results: any, rules: AdaptiveRule[] = []) => {
     class MockDeviceHelper {
       validate() {
         return Observable.of(results.devices);
@@ -42,6 +43,7 @@ describe('AdaptiveService', () => {
         { provide: DeviceHelper, useClass: MockDeviceHelper },
         { provide: OrientationHelper, useClass: MockOrientationHelper },
         { provide: ScreenWidthHelper, useClass: MockScreenWidthHelper },
+        { provide: ADAPTIVE_RULES, useValue: rules}
       ]
     });
 
@@ -235,5 +237,127 @@ describe('AdaptiveService', () => {
         custom: [promise, Observable.of(true), true, () => true]
       })
       .subscribe((result) => expect(result).toBe(false));
+  }));
+
+  it('should emit false when a condition specified as a rule doesn\'t validate', async(() => {
+    const rule: AdaptiveRule = {
+      name: 'myScreenWidthRule',
+      conditions: {
+        minScreenWidth: 100
+      }
+    };
+
+    configureTestbed({
+      maxScreenWidth: false,
+      minScreenWidth: false,
+      orientation: true,
+      devices: true
+    }, [rule]);
+
+    adaptiveService
+      .validate({
+        rule: rule.name
+      })
+      .subscribe((result) => expect(result).toBe(false));
+  }));
+
+  it('should emit true when a condition specified as a rule does validate', async(() => {
+    const rule: AdaptiveRule = {
+      name: 'myScreenWidthRule',
+      conditions: {
+        minScreenWidth: 100
+      }
+    };
+
+    configureTestbed({
+      maxScreenWidth: false,
+      minScreenWidth: true,
+      orientation: true,
+      devices: true
+    }, [rule]);
+
+    adaptiveService
+      .validate({
+        rule: rule.name
+      })
+      .subscribe((result) => expect(result).toBe(true));
+  }));
+
+  it('should throw an error when trying to use an unspecified rule', async(() => {
+    const rule: AdaptiveRule = {
+      name: 'myScreenWidthRule',
+      conditions: {
+        minScreenWidth: 100
+      }
+    };
+
+    configureTestbed({
+      maxScreenWidth: false,
+      minScreenWidth: true,
+      orientation: true,
+      devices: true
+    }, [rule]);
+
+    adaptiveService
+      .validate({
+        rule: 'thisRuleDoesNotExist'
+      })
+      .subscribe(
+      (result) => fail('Expected an error'),
+      (error) => {}
+      );
+  }));
+
+  it('should be able to add a new rule during runtime', async(() => {
+    const rule: AdaptiveRule = {
+      name: 'myScreenWidthRule',
+      conditions: {
+        minScreenWidth: 100
+      }
+    };
+
+    configureTestbed({
+      maxScreenWidth: false,
+      minScreenWidth: true,
+      orientation: true,
+      devices: true
+    });
+
+    adaptiveService.addRule(rule);
+
+    adaptiveService
+      .validate({
+        rule: rule.name
+      })
+      .subscribe(
+      (result) => expect(result).toBe(true)
+      );
+  }));
+
+  it('should be able to remove a rule during runtime', async(() => {
+    const rule: AdaptiveRule = {
+      name: 'myScreenWidthRule',
+      conditions: {
+        minScreenWidth: 100
+      }
+    };
+
+    configureTestbed({
+      maxScreenWidth: false,
+      minScreenWidth: true,
+      orientation: true,
+      devices: true
+    });
+
+    adaptiveService.removeRule(rule.name);
+
+    adaptiveService
+      .validate({
+        rule: rule.name
+      })
+      .subscribe(
+        (result) => fail('Expected an error'),
+        (error) => {}
+      );
   }));
 });

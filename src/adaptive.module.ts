@@ -1,6 +1,6 @@
 import {ModuleWithProviders, NgModule} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {AdaptiveService} from './services/adaptive/adaptive.service';
+import {AdaptiveRule, AdaptiveService} from './services/adaptive/adaptive.service';
 import {AdaptiveClassesDirective} from './directives/adaptive-classes';
 import {IfAdaptiveDirective} from './directives/if-adaptive';
 import {DeviceHelper} from "./helpers/device/device.helper";
@@ -9,12 +9,13 @@ import {IfDevicesDirective} from "./directives/if-devices/if-devices.directive";
 import {ScreenWidthHelper, ScreenWidthSpec} from "./helpers/screen-width/screen-width.helper";
 import {IfMinScreenWidthDirective} from "./directives/if-min-screen-width/if-min-screen-width.directive";
 import {WindowRefHelper} from "./helpers/window-ref/window-ref";
-import {DEBOUNCE_TIME, SCREEN_WIDTH_BREAKPOINTS, USER_AGENT_STRING} from "./injection-tokens";
+import {ADAPTIVE_RULES, DEBOUNCE_TIME, SCREEN_WIDTH_BREAKPOINTS, USER_AGENT_STRING} from "./injection-tokens";
 
 export interface AdaptiveModuleConfig {
   userAgentString?: string;
   debounceTime?: number;
   screenWidthBreakpoints?: ScreenWidthSpec[];
+  adaptiveRules?: AdaptiveRule[];
 }
 
 export const defaultScreenWidths: ScreenWidthSpec[] = [
@@ -65,7 +66,8 @@ export class AdaptiveModule {
         WindowRefHelper,
         { provide: USER_AGENT_STRING, useValue: config.userAgentString || defaultUserAgentString },
         { provide: DEBOUNCE_TIME, useValue: config.debounceTime || defaultDebounceTime },
-        { provide: SCREEN_WIDTH_BREAKPOINTS, useValue: config.screenWidthBreakpoints || defaultScreenWidths }
+        { provide: SCREEN_WIDTH_BREAKPOINTS, useValue: config.screenWidthBreakpoints || defaultScreenWidths },
+        { provide: ADAPTIVE_RULES, useValue: config.adaptiveRules }
       ]
     };
   }

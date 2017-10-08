@@ -52,6 +52,8 @@ export class BrowserHelper {
     const md = new MobileDetect(this.userAgentString);
     const browser: Browser = <Browser>md.userAgent();
 
+    console.log(browser);
+
     this.active
       .take(1)
       .filter(prevBrowser => prevBrowser !== browser)
