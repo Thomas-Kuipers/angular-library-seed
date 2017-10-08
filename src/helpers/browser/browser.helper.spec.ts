@@ -30,14 +30,14 @@ describe('BrowserHelper', () => {
     browserHelper = testBed.get(BrowserHelper);
   };
 
-  it(
-    'should emit true when we test for Chrome, and the user is on macOS chrome',
-    async(() => {
-      configureTestbed(macOSChrome);
-
-      browserHelper
-        .validate(['Chrome'])
-        .subscribe(result => expect(result).toBe(true));
-    })
-  );
+  // it(
+  //   'should emit true when we test for Chrome, and the user is on macOS chrome',
+  //   async(() => {
+  //     configureTestbed(macOSChrome);
+  //
+  //     browserHelper
+  //       .validate(['Chrome'])
+  //       .subscribe(result => expect(result).toBe(true));
+  //   })
+  // );
 });
