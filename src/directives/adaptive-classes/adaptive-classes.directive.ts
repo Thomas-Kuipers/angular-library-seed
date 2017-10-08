@@ -18,7 +18,7 @@ export interface AdaptiveClassesInterface {
  * orientation (landscape/portrait).
  *
  * Example usage 1:
- * <div [adaptiveClasses]="{mySmallFontClass: {maxScreenWidth: 'small', orientation: 'landscape', device: 'desktop'}}"></div>
+ * <div [adaptiveClasses]="{mySmallFontClass: {maxScreenWidth: 's', orientation: 'landscape', devices: ['desktop']}}"></div>
  * The class 'mySmallFontClass' will only be used if all these conditions are true: (AND)
  *  - the screen width is small (check the ResponsiveService for more info on what is small exactly)
  *  - the device is a desktop
@@ -30,7 +30,7 @@ export interface AdaptiveClassesInterface {
  * of device is being used or what the orientation mode is.
  *
  * Example usage 3:
- * <div [adaptiveClasses]="{largeFont: {minScreenWidth: 'normal'}, fatFingers: {device: ['tablet','mobile']}"></div>
+ * <div [adaptiveClasses]="{largeFont: {minScreenWidth: 'normal'}, fatFingers: {devices: ['tablet','mobile']}"></div>
  * The class 'largeFont' will be used if the screen width is normal.
  * The class 'fatFingers' will be used if the device is either tablet or mobile.
  *
@@ -63,6 +63,9 @@ export class AdaptiveClassesDirective implements OnInit, OnDestroy {
     });
   }
 
+  /**
+   * We have a separate subscription for every css class, so now we need to unsubscribe for all of them.
+   */
   public ngOnDestroy() {
     this.subscriptions.forEach((subscription) => {
       subscription.unsubscribe();
